@@ -1,0 +1,7 @@
+
+# init orgs script
+GROUP_IMAGE_UPLOADS_PATH=<path>
+
+# API Access
+API_TOKEN=<token>
+CKAN_URL=<url>
