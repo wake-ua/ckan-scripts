@@ -4,6 +4,7 @@ from requests.exceptions import HTTPError
 import json
 import pprint
 import csv
+import io
 import shutil
 import os
 import sys
@@ -18,6 +19,7 @@ CKAN_URL = os.getenv('CKAN_URL')
 
 # parameters
 FILE_DIR = "./data"
+PREVIEW_LINES = 10
 
 CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
 
@@ -93,6 +95,37 @@ def edit_dataset(dataset: dict, update: bool = False) -> (int, dict):
         "spatial": json.dumps(default_locations[dataset["organization"]["name"]])
         # "extras": [{"key": "spatial", "value": json.dumps(default_locations[dataset["organization"]["name"]])}]
     }
+
+    # check resources
+    ckan_resources = []
+    for resource in dataset["resources"]:
+        ckan_resource = {}
+        ckan_resource["url"] = resource["url"]
+        ckan_resource["name"] = resource["name_es"]
+        ckan_resource["description"] = resource.get("description_es", resource["description"])
+        ckan_resource["format"] = resource["format"]
+        ckan_resource["size"] = resource["size"]
+        ckan_resource["mimetype"] = resource["mimetype"]
+
+        if resource["url"].endswith(".csv"):
+            print("\t * CSV Resource found: {}".format(resource["url"].split("/")[-1]))
+            response = requests.get(resource["url"])
+            buff = io.StringIO(response.text)
+            cr = csv.DictReader(buff)
+            selected_lines = []
+            for row in cr:
+                selected_lines += [row]
+                if len(selected_lines) >= PREVIEW_LINES:
+                    break
+
+            if selected_lines:
+                header = [k for k in selected_lines[0].keys()]
+                ckan_resource["description"] += "\n Data header: " + ', '.join(header)
+
+        ckan_resources += [ckan_resource]
+
+    if ckan_resources:
+        ckan_dataset["resources"] = ckan_resources
 
     # call the endpoint
     if not update:
