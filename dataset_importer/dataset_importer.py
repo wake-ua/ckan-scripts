@@ -102,8 +102,7 @@ def handle_csv_resource(ckan_resource: dict) -> (str, dict):
             break
 
     if selected_lines:
-        timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
-        file_name = os.path.join(TMP_DIR, 'PREVIEW_' + timestamp + '_' + ckan_resource["url"].split("/")[-1])
+        file_name = os.path.join(TMP_DIR, 'PREVIEW_' + ckan_resource["id"] + '_' + ckan_resource["url"].split("/")[-1])
         header = [k for k in selected_lines[0].keys()]
 
         print("\t  *  Saving preview at: " + file_name)
@@ -136,6 +135,7 @@ def edit_dataset(dataset: dict, update: bool = False) -> (int, dict):
     ckan_resources = []
     for resource in dataset["resources"]:
         ckan_resource = {}
+        ckan_resource["id"] = resource["id"]
         ckan_resource["url"] = resource["url"]
         ckan_resource["name"] = resource["name_es"]
         ckan_resource["description"] = resource.get("description_es", resource["description"])
