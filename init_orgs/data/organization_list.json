@@ -12,7 +12,7 @@
         "ca": "Dades obertes de l'ajuntament d'Alcoi",
         "en": "Open data of the Alcoy city council"
       },
-      "url": "https://opendata.alcoi.org/data",
+      "source": "https://opendata.alcoi.org/data",
       "type": "CKAN",
       "image": "logo_alcoy.png",
       "muniine": "3009",
@@ -31,7 +31,7 @@
         "ca": "Dades obertes del govern d'Espanya",
         "en": "Open data from the government of Spain"
       },
-      "url": "https://datos.gob.es/es/",
+      "source": "https://datos.gob.es/es/",
       "type": "custom",
       "image": "logo_ine.png",
       "muniine": "",
@@ -49,9 +49,9 @@
         "ca": "El Portal de Dades Obertes de Torrent té com a objectiu oferir la disponibilitat i accés a les dades del nostre municipi.",
         "en": "The Torrent Open Data Portal aims to offer the availability and access to the data of our municipality"
       },
-      "url": "http://datosabiertos.torrent.es",
+      "source": "http://datosabiertos.torrent.es",
       "type": "CKAN",
-      "image": "logo_torrent",
+      "image": "logo_torrent.png",
       "muniine": "46244",
       "spatial":  {"type": "Polygon", "coordinates": [[[-0.4658235579407277, 39.39971663976929], [-0.45069730561435184, 39.40280935758924], [-0.4381504467680264, 39.41057118248469], [-0.4473120815572503, 39.42174383323241], [-0.44728283138031527, 39.421775571933146], [-0.4457580586047197, 39.42343001604129], [-0.43776412533379616, 39.43127179438879], [-0.43981224519912837, 39.437499242293356], [-0.45577959261909345, 39.44248938916956], [-0.45682959830917363, 39.449404144334665], [-0.4749491497515213, 39.44696321999045], [-0.5048892725120493, 39.44292330515174], [-0.5077707895656424, 39.44454198004339], [-0.5172737013464233, 39.44197227240383], [-0.5344675398226781, 39.44367832019312], [-0.554682270184644, 39.42880973697329], [-0.5658712643353887, 39.42876583406816], [-0.581178055065872, 39.430211446607885], [-0.6038780554350145, 39.43562526189387], [-0.6054842783568644, 39.4389466629875], [-0.6171900219935075, 39.4442153805213], [-0.612723460953237, 39.43755556531876], [-0.6126772569821723, 39.431068081368096], [-0.609143552074698, 39.42739183073047], [-0.6038856027207613, 39.40997769152461], [-0.5992816460894461, 39.41011639440253], [-0.5932522227871554, 39.40411050206956], [-0.5905964013590401, 39.39186506960127], [-0.5739545634265077, 39.38693287252538], [-0.5498711590415921, 39.38906871734061], [-0.5364936215280776, 39.38684069151717], [-0.5095708036373946, 39.398572932969735], [-0.4755691986881881, 39.3983351849723], [-0.4658235579407277, 39.39971663976929]]]}
     },
@@ -67,7 +67,7 @@
         "ca": "Portal de dades obertes de l'ajuntament de Sagunt",
         "en": "Open data portal of the Sagunto city council"
       },
-      "url": "http://datosabiertos.sagunto.es",
+      "source": "http://datosabiertos.sagunto.es",
       "type": "CKAN",
       "image": "logo_sagunto.png",
       "muniine": "46220",
@@ -85,9 +85,9 @@
         "ca": "Dades obertes del Consorci de l'Administració Oberta de Catalunya",
         "en": "Open data of the Open Administration Consortium of Catalonia"
       },
-      "url": "http://dadesobertes.seu-e.cat",
+      "source": "http://dadesobertes.seu-e.cat",
       "type": "CKAN",
-      "image": "",
+      "image": "logo_aoc.png",
       "muniine": "",
       "spatial": ""
     },
@@ -103,7 +103,7 @@
         "ca": "Portal de dades obertes de València",
         "en": "Open data portal of Valencia"
       },
-      "url": "https://valencia.opendatasoft.com",
+      "source": "https://valencia.opendatasoft.com",
       "type": "OpenDataSoft",
       "image": "logo_valencia.png",
       "muniine": "",
@@ -121,9 +121,9 @@
         "ca": "El principal objectiu d'aquest portal és posar a la disposició de la societat i fer públics les dades que gestiona l'administració, per la qual cosa qualsevol persona o organització puga utilitzar-les.",
         "en": "The main objective of this portal is to make available to society and make public the data managed by the administration, so that any person or organization can use them. "
       },
-      "url": "https://datosabiertos.dipcas.es",
+      "source": "https://datosabiertos.dipcas.es",
       "type": "OpenDataSoft",
-      "image": "dipcas_logo.png",
+      "image": "logo_dipcas.png",
       "muniine": "",
       "spatial": ""
     }

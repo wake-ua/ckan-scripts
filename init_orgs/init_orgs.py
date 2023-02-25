@@ -18,7 +18,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 CKAN_URL = os.getenv('CKAN_URL')
 
 # parameters
-FILE_PATH = "./data/organizations_list.csv"
+FILE_PATH = "./data/organization_list.json"
 IMAGE_DIR = "./data/image"
 
 CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
@@ -31,15 +31,11 @@ def read_organizations(file_path: str) -> list:
 
     organizations = []
 
-    with open(FILE_PATH) as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
-
-        for row in reader:
-            organizations += [row]
-            print("\t * {}".format(row))
+    with open(FILE_PATH) as jsonfile:
+        organizations = json.load(jsonfile)["organizations"]
 
     print(" \t => Read {} organization(s): {}".format(len(organizations),
-                                                      ', '.join([org['name'] for org in organizations])))
+          ', '.join([org['name'] for org in organizations])))
 
     return organizations
 
@@ -53,7 +49,7 @@ def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {}, pa
     # do the actual call
     try:
         if method == 'post':
-            response = requests.post('{}{}'.format(CKAN_API_URL, endpoint), data=data, params=params, headers=headers)
+            response = requests.post('{}{}'.format(CKAN_API_URL, endpoint), json=data, params=params, headers=headers)
         else:
             response = requests.get('{}{}'.format(CKAN_API_URL, endpoint), params=params, headers=headers)
 
