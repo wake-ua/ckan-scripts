@@ -16,9 +16,9 @@ load_dotenv('../.env')
 UPLOADS_PATH = os.getenv('GROUP_IMAGE_UPLOADS_PATH')
 API_TOKEN = os.getenv('API_TOKEN')
 CKAN_URL = os.getenv('CKAN_URL')
+FILE_PATH = os.getenv('ORGANIZATION_LIST_PATH')
 
 # parameters
-FILE_PATH = "./data/organization_list.json"
 IMAGE_DIR = "./data/image"
 
 CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
