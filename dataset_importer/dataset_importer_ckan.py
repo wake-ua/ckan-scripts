@@ -23,19 +23,6 @@ ORGANIZATIONS_FILE_PATH = os.getenv('ORGANIZATION_LIST_PATH')
 # parameters
 CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
 
-#
-# def transform_location(geometry: dict) -> dict:
-#     new_location = {"type": geometry["type"], "coordinates": []}
-#     # TODO: check for other geometry, this was only tested for Polygons
-#     data = geometry["coordinates"][0]
-#     poly_municipio = Polygon(data, srid=32630)
-#     poly_gps = poly_municipio.transform(4326, clone=True)
-#     coordinates = []
-#     for c1, c2 in poly_gps.coords[0]:
-#         coordinates = [[c1, c2]] + coordinates
-#     new_location["coordinates"] = [coordinates]
-#     return new_location
-
 
 def get_datasets_list(file_dir: str) -> list:
     # read the datasets files
@@ -100,7 +87,7 @@ def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {},
     return -1, result
 
 
-def get_translated_field(field: str, dataset: dict, default_value: str, org_name: str) -> dict:
+def get_translated_field(field: str, dataset: dict, default_value: str, org_name: str, mandatory: bool = False) -> dict:
     new_field = {'es': "", 'ca': "", "en": ""}
 
     for lang in new_field.keys():
@@ -130,6 +117,39 @@ def get_translated_field(field: str, dataset: dict, default_value: str, org_name
             new_field["es"] = multi_value[1]
             new_field["en"] = multi_value[1]
 
+    # special for torrent
+    if org_name == "sagunto":
+        multi_value = new_field["es"].split(" / ")
+        if len(multi_value) == 2:
+            new_field["es"] = multi_value[0]
+            new_field["ca"] = multi_value[1]
+            new_field["en"] = multi_value[0]
+        else:
+            multi_value = new_field["es"].split(" - ")
+            if len(multi_value) == 2:
+                new_field["es"] = multi_value[0]
+                new_field["ca"] = multi_value[1]
+                new_field["en"] = multi_value[0]
+
+    # special for aoc
+    if org_name == "aoc":
+        value = dataset.get(field + '_translated', {})
+        if value and isinstance(value, dict):
+            new_field["ca"] = value.get("ca", new_field["ca"])
+            new_field["es"] = value.get("es", new_field["es"])
+            new_field["en"] = value.get("en", new_field["en"])
+
+    if mandatory:
+        langs = list(new_field.keys())
+        some_value = dataset["name"]
+        for lang in langs:
+            if len(new_field[lang])>0:
+                some_value = new_field[lang]
+                break
+        for lang in langs:
+            if len(new_field[lang]) == 0:
+                new_field[lang] = some_value
+
     return new_field
 
 
@@ -137,7 +157,7 @@ def edit_dataset(dataset: dict, organization: dict, update: bool = False) -> (in
     # map attributes to ckan dataset
     ckan_dataset = {
         "name": organization["name"] + "-" + dataset["name"],
-        "title": get_translated_field("title", dataset, dataset["name"], organization["name"]),
+        "title": get_translated_field("title", dataset, dataset["name"], organization["name"], True),
         "notes": get_translated_field("notes", dataset, dataset["title"], organization["name"]),
         "owner_org": organization["name"],
         "license_id": dataset["license_id"],
@@ -182,12 +202,15 @@ def main() -> int:
     input_dir = "./data/datosAbiertosSagunto"
     organization_name = "sagunto"
 
-    if len(sys.argv)>2:
+    input_dir = "./data/dadesObertesSeu-eCat"
+    organization_name = "aoc"
+
+    if len(sys.argv) > 2:
         input_dir = sys.argv[1]
         organization_name = sys.argv[2]
     print(" * Reading {} datasets from {}".format(input_dir, organization_name))
 
-    # get teh organization data
+    # get the organization data
     organization = read_organization(organization_name)
     print(" * Got organization {} ({}) data".format(organization["title"]["en"], organization['name']))
 
