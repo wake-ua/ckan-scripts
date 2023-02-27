@@ -109,6 +109,24 @@
       "muniine": "",
       "spatial": ""
     },
+        {
+      "name": "gva",
+      "title": {
+        "es": "Portal de Datos Abiertos de la Generalitat Valenciana",
+        "ca": "Portal de Dades Obertes de la Generalitat Valenciana",
+        "en": "Open Data Portal of the Generalitat Valenciana"
+      },
+      "description": {
+        "es": "El Portal de Datos Abiertos es el espacio digital en el que la Generalitat publica en formatos abiertos los datos que produce como resultado de las actividades que realiza en el ejercicio de sus competencias. El objetivo de este portal es facilitar a la ciudadanía el acceso libre y gratuito a los datos públicos para que los pueda utilizar y reutilizar para aprovechar su potencial económico y social. Al mismo tiempo, la publicación de estos datos contribuye a mejorar y reforzar la transparencia y la rendición de cuentas de la Generalitat.",
+        "ca": "El Portal de Dades Obertes és l'espai digital en què la Generalitat publica en formats oberts les dades que produeix com a resultat de les activitats que realitza en l'exercici de les seues competències. L'objectiu d'aquest portal és facilitar a la ciutadania l'accés lliure i gratuït a les dades públiques perquè les puga utilitzar i reutilitzar per a aprofitar el seu potencial econòmic i social. Al mateix temps, la publicació d'aquestes dades contribueix a millorar i reforçar la transparència i la rendició de comptes de la Generalitat.",
+        "en": "The Open Data Portal is the digital space in which the Generalitat publishes in open formats the data it produces as a result of the activities it carries out in the exercise of its powers. The objective of this portal is to provide citizens with free and open access to public data so that they can use and reuse them to take advantage of their economic and social potential. At the same time, the publication of these data contributes to improving and reinforcing the transparency and accountability of the Generalitat."
+      },
+      "source": ": https://dadesobertes.gva.es",
+      "type": "CKAN",
+      "image": "logo_gva.png",
+      "muniine": "",
+      "spatial": { "coordinates": [[[0.625851290802359, 40.48133244644893], [0.2732706755032268, 40.76654599065057], [-0.2463218101999871, 40.868363272946254], [-0.42725133647198277, 40.66457247519051], [-0.8633378869726585, 40.038800675944486], [-1.322620530585226, 40.25157716176338], [-1.5174677127241694, 40.177181206177806], [-1.3690127168089532, 39.93571990163392], [-1.2344753767606562, 39.871660516226285], [-1.6288089596605744, 39.51468530705279], [-1.3690127168089532, 39.28166238502138], [-1.6009736479266792, 38.41817772372269], [-1.763346299708843, 38.48357468704441], [-2.491703623417891, 38.17423519010583], [-1.8990905001920453, 37.37329442597519], [-1.3216741594373502, 37.34336206134542], [-0.336300621409066, 37.671960858563594], [0.2976021005072482, 38.747014992667516], [-0.2170515945141176, 39.467787816788416], [0.625851290802359, 40.48133244644893]]], "type": "Polygon"}
+    },
     {
       "name": "dipcas",
       "title": {
