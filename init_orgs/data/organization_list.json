@@ -121,7 +121,7 @@
         "ca": "El Portal de Dades Obertes és l'espai digital en què la Generalitat publica en formats oberts les dades que produeix com a resultat de les activitats que realitza en l'exercici de les seues competències. L'objectiu d'aquest portal és facilitar a la ciutadania l'accés lliure i gratuït a les dades públiques perquè les puga utilitzar i reutilitzar per a aprofitar el seu potencial econòmic i social. Al mateix temps, la publicació d'aquestes dades contribueix a millorar i reforçar la transparència i la rendició de comptes de la Generalitat.",
         "en": "The Open Data Portal is the digital space in which the Generalitat publishes in open formats the data it produces as a result of the activities it carries out in the exercise of its powers. The objective of this portal is to provide citizens with free and open access to public data so that they can use and reuse them to take advantage of their economic and social potential. At the same time, the publication of these data contributes to improving and reinforcing the transparency and accountability of the Generalitat."
       },
-      "source": ": https://dadesobertes.gva.es",
+      "source": "https://dadesobertes.gva.es",
       "type": "CKAN",
       "image": "logo_gva.png",
       "muniine": "",

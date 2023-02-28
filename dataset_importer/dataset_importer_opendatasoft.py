@@ -22,6 +22,7 @@ ORGANIZATIONS_FILE_PATH = os.getenv('ORGANIZATION_LIST_PATH')
 
 # parameters
 CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
+LANGS = ['es', 'ca', 'en']
 
 
 def get_datasets_list(file_dir: str) -> list:
@@ -109,41 +110,19 @@ def get_translated_field(field: str, dataset: dict, default_value: str, org_name
         if value:
             new_field[lang] = value
 
-    # special for torrent
-    if org_name == "torrent":
+    # special cases
+    if org_name == "valencia":
         multi_value = new_field["es"].split(" / ")
         if len(multi_value) == 2:
             new_field["ca"] = multi_value[0]
             new_field["es"] = multi_value[1]
             new_field["en"] = multi_value[1]
 
-    # special for sagunto
-    if org_name == "sagunto":
-        multi_value = new_field["es"].split(" / ")
-        if len(multi_value) == 2:
-            new_field["es"] = multi_value[0]
-            new_field["ca"] = multi_value[1]
-            new_field["en"] = multi_value[0]
-        else:
-            multi_value = new_field["es"].split(" - ")
-            if len(multi_value) == 2:
-                new_field["es"] = multi_value[0]
-                new_field["ca"] = multi_value[1]
-                new_field["en"] = multi_value[0]
-
-    # special for aoc
-    if org_name == "aoc":
-        value = dataset.get(field + '_translated', {})
-        if value and isinstance(value, dict):
-            new_field["ca"] = value.get("ca", new_field["ca"])
-            new_field["es"] = value.get("es", new_field["es"])
-            new_field["en"] = value.get("en", new_field["en"])
-
     if mandatory:
         langs = list(new_field.keys())
-        some_value = dataset["name"]
+        some_value = dataset["identifier"]
         for lang in langs:
-            if len(new_field[lang])>0:
+            if len(new_field[lang]) > 0:
                 some_value = new_field[lang]
                 break
         for lang in langs:
@@ -153,28 +132,45 @@ def get_translated_field(field: str, dataset: dict, default_value: str, org_name
     return new_field
 
 
-def edit_dataset(dataset: dict, organization: dict, update: bool = False) -> (int, dict):
+def edit_dataset(dataset: dict, organization: dict, update: bool = False, resource_ids: dict ={}) -> (int, dict):
     # map attributes to ckan dataset
     ckan_dataset = {
-        "name": organization["name"] + "-" + dataset["name"],
-        "title": get_translated_field("title", dataset, dataset["name"], organization["name"], True),
-        "notes": get_translated_field("notes", dataset, dataset["title"], organization["name"]),
-        "url": organization["source"] + "/dataset/" + dataset["name"],
+        "name": organization["name"] + "-" + dataset["identifier"],
+        "title": get_translated_field("title", dataset, dataset["identifier"], organization["name"], True),
+        "notes": get_translated_field("description", dataset, dataset["title"], organization["name"]),
+        "url": organization["source"] + "/explore/dataset/" + dataset["identifier"],
         "owner_org": organization["name"],
-        "license_id": dataset["license_id"],
+        "license_id": dataset["license"],
         "spatial": json.dumps(organization["spatial"])}
 
     # check resources
     ckan_resources = []
     for resource in dataset["resources"]:
         ckan_resource = {}
-        ckan_resource["id"] = resource["id"]
-        ckan_resource["url"] = resource["url"]
-        ckan_resource["name"] = get_translated_field("name", resource, resource["id"], organization["name"])
-        ckan_resource["description"] = get_translated_field("description", resource, resource["name"], organization["name"])
-        ckan_resource["format"] = resource["format"]
-        ckan_resource["size"] = resource["size"]
-        ckan_resource["mimetype"] = resource["mimetype"]
+        # ckan_resource["id"] = resource["id"]
+
+        # handle urls
+        ckan_resource["url"] = resource["downloadUrl"][0]
+        other_urls = []
+        i = 0
+        for url in resource["downloadUrl"]:
+            if resource["mediaType"][i].lower().strip() == 'csv':
+                ckan_resource["url"] = url
+            else:
+                other_urls += [(resource["mediaType"][i].lower().strip(), url)]
+            i += 1
+
+        ckan_resource["name"] = {lang: resource["path"].split('/')[-1].split('.')[0] for lang in LANGS}
+
+        if update:
+            resource_ids = get_resource_ids(ckan_dataset)
+            if resource_ids.get(ckan_resource["name"]["es"], False):
+                ckan_resource["id"] =resource_ids[ckan_resource["name"]["es"]]
+
+        ckan_resource["description"] = {lang: "" for lang in LANGS}
+        ckan_resource["format"] = ckan_resource["url"].split('/')[-1]
+        # ckan_resource["size"] = resource["size"]
+        ckan_resource["mimetype"] = resource["path"].split('.')[-1]
         ckan_resources += [ckan_resource]
 
     if ckan_resources:
@@ -191,23 +187,26 @@ def edit_dataset(dataset: dict, organization: dict, update: bool = False) -> (in
     return success, result
 
 
+def get_resource_ids(dataset: dict) -> dict:
+    resource_ids = {}
+    success, result = ckan_api_request(endpoint="package_show", method="get",
+                                           token=API_TOKEN, params={"id": dataset["name"]})
+    ckan_dataset = result["result"]
+    for resource in ckan_dataset.get("resources", []):
+        resource_ids[resource["name"]["es"]] = resource["id"]
+    return resource_ids
+
+
 def main() -> int:
 
     # get commmandline params
-    # input_dir = "./data/openDataAlcoi"
-    # organization_name = "alcoi"
 
-    # input_dir = "./data/datosAbiertosTorrent"
-    # organization_name = "torrent"
+    input_dir = "./data/valenciaOpenDataSoft"
+    organization_name = "valencia"
 
-    input_dir = "./data/datosAbiertosSagunto"
-    organization_name = "sagunto"
+    # input_dir = "./data/datosAbiertosDipCas"
+    # organization_name = "dipcas"
 
-    # input_dir = "./data/dadesObertesSeu-eCat"
-    # organization_name = "aoc"
-
-    # input_dir = "./data/dadesobertesGVA"
-    # organization_name = "gva"
 
     if len(sys.argv) > 2:
         input_dir = sys.argv[1]
@@ -231,21 +230,20 @@ def main() -> int:
         print("* Reading dataset {}".format(dataset_file))
         dataset = read_dataset(dataset_file)
 
-        print("\n * Creating DATA: {}".format(dataset["name"]))
+        print("\n * Creating DATA: {}".format(dataset["identifier"]))
         success, result = edit_dataset(dataset, organization)
         if success >= 0:
             print("\t * Created: {}...".format(str(result)[:500]))
-            created_datasets += [dataset["name"]]
+            created_datasets += [dataset["identifier"]]
         else:
             print("\t => Created Failed, trying UPDATE...")
             success, result = edit_dataset(dataset, organization, update=True)
             if success >= 0:
                 print("\t * Updated: {}...".format(str(result)[:500]))
-                updated_datasets += [dataset["name"]]
+                updated_datasets += [dataset["identifier"]]
             else:
                 print("\t => * Update Failed *")
                 return -1
-        # break
 
     print(" \t - Created {} datasets: {} "
           "\n\t - Updated {} datasets: {}".format(len(created_datasets), ', '.join(created_datasets),
