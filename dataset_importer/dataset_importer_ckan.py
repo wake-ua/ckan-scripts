@@ -202,11 +202,11 @@ def main() -> int:
     # input_dir = "./data/datosAbiertosSagunto"
     # organization_name = "sagunto"
 
-    # input_dir = "./data/dadesObertesSeu-eCat"
-    # organization_name = "aoc"
+    input_dir = "./data/dadesObertesSeu-eCat"
+    organization_name = "aoc"
 
-    input_dir = "./data/dadesobertesGVA"
-    organization_name = "gva"
+    # input_dir = "./data/dadesobertesGVA"
+    # organization_name = "gva"
 
     if len(sys.argv) > 2:
         input_dir = sys.argv[1]
