@@ -1,0 +1,36 @@
+group,tag_vocabulary_es,tag_es,tag_vocabulary_ca,tag_ca,tag_vocabulary_en,tag_en,synonyms,datasets
+alojamientos,Hoteles,hoteles,Hotels,hotels,Hotels,hotels,hotel,dipcas-hoteles
+alojamientos,Albergues,albergues,Refugi,refugi,Shelters,shelters,albergue,
+alojamientos,Pensiones,pensiones,Pensions,pensions,Pensions,pensions,pension,
+alojamientos,Alojamiento Rural ,alojamiento rural ,Allotjament rural,allotjament rural,Rural accommodation,rural accommodation,,
+alojamientos,Hostales,hostales,Hostals,hostals,Hostels,hostels,hostal,dipcas-hostales
+alojamientos,Camping ,camping ,Campament,campament,Camping,camping,,
+alojamientos,Encuestas de ocupación,encuestas ocupación,Enquestes d'ocupació,enquestes ocupació,Occupation surveys,occupation surveys,,
+alojamientos,Indicadores de Rentabilidad del Sector Hotelero,indicadores rentabilidad sector_hotelero,Indicadors de rendibilitat del sector hoteler,indicadors rendibilitat sector_hoter,Profitability indicators of the hotel sector,profitability indicators hotel_sector,,
+recursos,Museos,museos,Museus,museus,Museums,museums,,alcoi-museus
+recursos,Rutas,rutas,Rutes,rutes,Routes,routes,,alcoi-ruta-ciudad-dormida dataset/alcoi-ruta-ovidi
+recursos,Monumentos ,monumentos ,Monuments,monuments,Monuments,monuments,,
+recursos,Bien de Interés Cultural,cultura,Interès cultural bo,cultura,Cultural Interest Good,culture,,sagunto-bienes-de-interes-cultural
+perfil,Turisticas,perfiles turistico,Turista,perfils turístics,Tourist,tourist profiles,,
+perfil,Pecnoctaciones,pecnoctaciones,Pecnoctacions,pecnoctacions,Pernoctations,percnoctations,,dipcas-viajeros-y-pernoctaciones-castellon-2020
+perfil,Viajero,viajero,Viatjant,viatjant,Traveler,traveler,,
+perfil,Perfiles demograficos,perfiles demografía,Perfils demogràfics,perfils demografia,Demographic profiles,demography profiles,,
+perfil,Satisfación en el destino,satisfación destino,Satisfacció a la destinació,satisfacció destinació,Satisfaction in the destination,destination satisfaction,,
+perfil,Gustos y habitos ,gustos habitos ,Gustos i hàbits,tasta hàbits,Tastes and habits,tastes habits,,
+empresas,Agencia de viaje ,agencia_de_viaje ,Agència de viatges,agència de viatges,Travel agency,travel agency,,dipcas-agencias-de-viaje-castellon-2020
+empresas,Alquiler de coches,alquiler coches,Lloguer de cotxes,llogar cotxes,Car rental,rent cars,,
+empresas,Empresas de turismo activo ,empresas turismo_activo ,Empreses turístiques actives,empreses turístiques,Active tourism companies,active_tourism companies,,dipcas-empresas-de-turismo-activo
+empresas,Restaurante ,restaurante ,Restaurant,restaurant,Restaurant,restaurant,,
+empleo,Empleo turístico,empleo turístico,Ocupació turística,ocupació turística,Tourist employment,tourist employment,,dipcas-empleo-turistico
+empleo,Estadística de Empleo Turístico según la Afiliación a la Seguridad Social,estadística empleo turístico seguridad_social,Estadístiques d’ocupació turística segons l’afiliació a la Seguretat Social,estadístiques ocupació turística seguretat_social,Tourist Employment Statistics according to social security affiliation,statistics tourist social_employment,,
+empleo,Empleo turístico según la Encuesta de Población Activa,empleo turístico encuesta  población_activa,L’ocupació turística segons l’enquesta de població activa,ocupació turística enquesta població_activa,Tourist employment according to the Active Population Survey,tourist employment active_population,,
+transporte,Autobuses,autobuses,Autobusos,autobusos,Buses,buses,,alcoi-autobuses sagunto-transporte-publico
+transporte,Entradas y salidas,entradas salidas,Entrades i sortides,tiquets,Inputs and outputs,tickets,,
+transporte,Entradas y salidas en tiempo real,entradas salidas tiempo_real,Entrades i sortides reals de temps,entrades sortides temps_reals,Real-time tickets and outputs,real-time timetable,,
+transporte,Estaciones,estaciones,Estacions,estacions,Seasons,seasons,,
+transporte,Carril Bici ,carril_bici ciclismo,Carril bici,ciclisme carril_bici,Bike lane,bike_lane cycling,,
+transporte,Estaciones de Bici ,estaciones_de_bici ciclismo,Estacions de bicicletes,ciclisme estacions_bici,Bike stations,bike_stations cycling,,
+transporte,Aparcamientos,aparcamientos,Estacionaments,estacionaments,Parking lots,parking_lot,,
+transporte,Tráfico ,tráfico ,Trànsit,trànsit,Traffic,traffic,conducción,
+otros,Medioambiente,medioambiente naturaleza,Entorn,entorn natural,Environment,environment nature,,
+otros,Otros,otros,Altres,altres,Other,other,,
