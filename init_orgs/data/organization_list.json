@@ -40,9 +40,9 @@
     {
       "name": "torrent",
       "title": {
-        "es": "Open Data Torrent",
-        "ca": "Open Data Torrent",
-        "en": "Open Data Torrent"
+        "es": "Torrent Open Data",
+        "ca": "Torrent Open Data",
+        "en": "Torrent Open Data"
       },
       "description": {
         "es": "El Portal de Datos Abiertos de Torrent tiene como objetivo ofrecer la disponibilidad y acceso a los datos de nuestro municipio.",
@@ -58,9 +58,9 @@
     {
       "name": "sagunto",
       "title": {
-        "es": "Open Data Sagunt",
-        "ca": "Open Data Sagunt",
-        "en": "Open Data Sagunt"
+        "es": "Sagunt Open Data",
+        "ca": "Sagunt Open Data",
+        "en": "Sagunt Open Data"
       },
       "description": {
         "es": "Portal de datos abiertos del ayuntamiento de Sagunto",
@@ -76,9 +76,9 @@
     {
       "name": "aoc",
       "title": {
-        "es": "Datos Abiertos AOC",
-        "ca": "Dades Obertes AOC",
-        "en": "Open Data AOC"
+        "es": "AOC Datos Abiertos",
+        "ca": "AOC Dades Obertes",
+        "en": "AOC Open Data"
       },
       "description": {
         "es": "Datos abiertos del Consorcio de la Administración Abierta de Cataluña",
@@ -112,9 +112,9 @@
         {
       "name": "gva",
       "title": {
-        "es": "Portal de Datos Abiertos de la Generalitat Valenciana",
-        "ca": "Portal de Dades Obertes de la Generalitat Valenciana",
-        "en": "Open Data Portal of the Generalitat Valenciana"
+        "es": "Generalitat Valenciana Datos Abiertos",
+        "ca": "Generalitat Valenciana Dades Obertes",
+        "en": "Generalitat Valenciana Open Data"
       },
       "description": {
         "es": "El Portal de Datos Abiertos es el espacio digital en el que la Generalitat publica en formatos abiertos los datos que produce como resultado de las actividades que realiza en el ejercicio de sus competencias. El objetivo de este portal es facilitar a la ciudadanía el acceso libre y gratuito a los datos públicos para que los pueda utilizar y reutilizar para aprovechar su potencial económico y social. Al mismo tiempo, la publicación de estos datos contribuye a mejorar y reforzar la transparencia y la rendición de cuentas de la Generalitat.",
@@ -130,9 +130,9 @@
     {
       "name": "dipcas",
       "title": {
-        "es": "Portal de datos abiertos Diputación de Castellón",
-        "ca": "Portal de dades obertes Diputació de Castelló",
-        "en": "Open data portal Castellón Provincial Council"
+        "es": "Diputación de Castellón Datos Abiertos",
+        "ca": "Diputació de Castelló Dades Obertes",
+        "en": "Castellón Provincial Council Open Data"
       },
       "description": {
         "es": "El principal objetivo de este portal es poner a disposición de la sociedad y hacer públicos los datos que gestiona la administración, por lo que cualquier persona u organización pueda utilizarlas. ",
