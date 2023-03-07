@@ -207,10 +207,13 @@ def main() -> int:
     # input_dir = "./data/datosAbiertosDipCas"
     # organization_name = "dipcas"
 
-
+    selected_package = None
     if len(sys.argv) > 2:
         input_dir = sys.argv[1]
         organization_name = sys.argv[2]
+        if len(sys.argv) > 3:
+            selected_package = sys.argv[3]
+
     print(" * Reading {} datasets from {}".format(input_dir, organization_name))
 
     # get the organization data
@@ -229,6 +232,10 @@ def main() -> int:
     for dataset_file in dataset_files:
         print("* Reading dataset {}".format(dataset_file))
         dataset = read_dataset(dataset_file)
+
+        if selected_package and dataset["identifier"] != selected_package:
+            print(" \t\t Skipping dataset {} (!= {})".format(dataset["identifier"], selected_package))
+            continue
 
         print("\n * Creating DATA: {}".format(dataset["identifier"]))
         success, result = edit_dataset(dataset, organization)
@@ -249,13 +256,13 @@ def main() -> int:
           "\n\t - Updated {} datasets: {}".format(len(created_datasets), ', '.join(created_datasets),
                                                   len(updated_datasets), ', '.join(updated_datasets)))
 
-    success, total_datasets = ckan_api_request(endpoint="package_list", method="get", token=API_TOKEN)
-    if success >= 0:
-        print("\n - CKAN Datasets ({}): {}".format(len(total_datasets["result"]), ', '.join(total_datasets["result"])))
-
-    else:
-        print("\t => * ERROR: Retrieving All Datasets Failed *")
-        return -1
+    # success, total_datasets = ckan_api_request(endpoint="package_list", method="get", token=API_TOKEN)
+    # if success >= 0:
+    #     print("\n - CKAN Datasets ({}): {}".format(len(total_datasets["result"]), ', '.join(total_datasets["result"])))
+    #
+    # else:
+    #     print("\t => * ERROR: Retrieving All Datasets Failed *")
+    #     return -1
 
     return 0
 
