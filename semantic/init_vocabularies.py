@@ -102,6 +102,39 @@ def edit_vocabulary(name: str, tags: list, update: bool = False) -> (int, dict):
     return success, result
 
 
+def add_datasets_groups(tags: list) -> (int, dict):
+    datasets = {}
+    not_found = []
+
+    for tag in tags:
+        group = tag["group"]
+        group_datasets = [dataset.strip() for dataset in tag["datasets"].split(" ") if dataset]
+        for dataset in group_datasets:
+            datasets[dataset] = datasets.get(dataset, []) + [group]
+    for dataset, group_ids in datasets.items():
+        name = dataset
+        # fix name if too long
+        if len(name) > 100:
+            name = name[0:100].rsplit('-', 1)[0]
+            print("WARNING: shortening name to <100: " + name)
+
+        print("\t\t - Adding groups to dataset {}: {}".format(name, ", ".join(group_ids)))
+        ckan_dataset = {"id": name, "groups": [{"name": group} for group in set(group_ids)]}
+
+        success, result = ckan_api_request(endpoint="package_patch", method="post",
+                                           token=API_TOKEN, data=ckan_dataset)
+        if success < 0:
+            if result['http_error'].response.status_code == 404:
+                not_found += [name]
+            else:
+                raise Exception("Could not patch dataset {}: ".format(name) + str(result))
+        print(result)
+
+    print(" ** WARNING NOT FOUND: {}".format(', '.join(set(not_found))))
+
+    return success, result
+
+
 def add_datasets(tags: list) -> (int, dict):
     cv_field = 'tag_string_schemaorg'
     not_found = []
@@ -119,6 +152,11 @@ def add_datasets(tags: list) -> (int, dict):
     for name, dataset in datasets.items():
         dataset[cv_field] = ','.join(dataset[cv_field])
         dataset["tag_string"] = ','.join(dataset["tag_string"])
+        # fix name if too long
+        if len(dataset["id"]) > 100:
+            dataset["id"] = dataset["id"][0:100].rsplit('-', 1)[0]
+            print("WARNING: shortening name to <100: " + dataset["id"])
+
         print("\t\t - Adding CV tags to dataset {}: {}".format(name, dataset[cv_field]))
         print("\t\t - Adding free tags to dataset {}: {}".format(name, dataset["tag_string"]))
         success, result = ckan_api_request(endpoint="package_patch", method="post",
@@ -163,9 +201,16 @@ def main() -> int:
     if success >= 0:
         print("\t * Updated: {}".format(result))
     else:
-        print("\t => * Update Failed *")
+        print("\t => * Update Tags Failed *")
         return -1
 
+    print("\n * Adding datasets to groups...")
+    success, result = add_datasets_groups(tags)
+    if success >= 0:
+        print("\t * Updated: {}".format(result))
+    else:
+        print("\t => * Update Groups Failed *")
+        return -1
 
     return 0
 

@@ -21,8 +21,8 @@ empresas,Agencias de viaje ,agencias_de_viaje ,Agèncias de viatges,agèncias_de
 empleo,Empleo turístico,empleo turístico,Ocupació turística,ocupació turística,Tourist employment,tourist employment,dipcas-empleo-turistico,
 transporte,Estaciones,estaciones,Estacions,estacions,Stations,stations,alcoi-estaciones,
 transporte,Autobuses,autobuses,Autobusos,autobusos,Buses,buses,alcoi-autobuses sagunto-transporte-publico,
-transporte,Tráfico ,tráfico ,Trànsit,trànsit,Traffic,traffic,,conducción
-transporte,Bici ,bici ciclismo,Bici,ciclisme bici,Bike,bike cycling,,
+transporte,Tráfico ,tráfico ,Trànsit,trànsit,Traffic,traffic,alcoi-entradas-salidas alcoi-entrades-sortides-temps-real,conducción
+transporte,Bici ,bici ciclismo,Bici,ciclisme bici,Bike,bike cycling,torrent-usos-de-torrentbici-per-estacio-d-origen-2022-usos-de-torrentbici-por-estacion-de-origen-2022 torrent-usos-de-torrentbici-per-estacio-d-origen-2021-usos-de-torrentbici-por-estacion-de-origen-2021 torrent-evolucio-usuari-servici-torrentbici torrent-usos-de-torrentbici-per-estacio-d-origen-2020-usos-de-torrentbici-por-estacion-de-origen-2020 torrent-estacions-torrent-bici,
 transporte,Movilidad Reducida,movilidad reducida minusvalía discapacidad,Mobilitat reduïda,Reducció discapacitat mobilitat,Reduced mobility,reduced mobility disability disability,valencia-zones-mobilitat-reduida-zonas-mobilidad-reducida torrent-aparcaments-mobilitat-reduida-2016,
 transporte,Aparcamientos,aparcamientos parkings,Estacionaments,estacionaments,Parking lots,parking_lot,torrent-aparcaments-mobilitat-reduida-2016 valencia-aparcaments-per-districtes-barris torrent-parkings-2016,
 otros,Otros,otros,Altres,altres,Other,other,,

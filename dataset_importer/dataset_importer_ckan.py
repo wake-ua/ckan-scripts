@@ -111,11 +111,11 @@ def get_translated_field(field: str, dataset: dict, default_value: str, org_name
 
     # special for torrent
     if org_name == "torrent":
-        multi_value = new_field["es"].split(" / ")
+        multi_value = new_field["es"].split("/ ")
         if len(multi_value) == 2:
-            new_field["ca"] = multi_value[0]
-            new_field["es"] = multi_value[1]
-            new_field["en"] = multi_value[1]
+            new_field["ca"] = multi_value[0].strip()
+            new_field["es"] = multi_value[1].strip()
+            new_field["en"] = multi_value[1].strip()
 
     # special for sagunto
     if org_name == "sagunto":
@@ -164,6 +164,14 @@ def edit_dataset(dataset: dict, organization: dict, update: bool = False) -> (in
         "license_id": dataset["license_id"],
         "spatial": json.dumps(organization["spatial"])}
 
+    for lang in ckan_dataset["title"].keys():
+        ckan_dataset["title"][lang] = organization["shortname"][lang] + ': ' + ckan_dataset["title"][lang]
+
+    # fix name if too long
+    if len(ckan_dataset["name"])>100:
+        ckan_dataset["name"] = ckan_dataset["name"][0:100].rsplit('-', 1)[0]
+        print("WARNING: shortening name to <100: " + ckan_dataset["name"] )
+
     # check resources
     ckan_resources = []
     for resource in dataset["resources"]:
@@ -200,14 +208,14 @@ def main() -> int:
     # input_dir = "./data/datosAbiertosTorrent"
     # organization_name = "torrent"
 
-    input_dir = "./data/datosAbiertosSagunto"
-    organization_name = "sagunto"
+    # input_dir = "./data/datosAbiertosSagunto"
+    # organization_name = "sagunto"
 
     # input_dir = "./data/dadesObertesSeu-eCat"
     # organization_name = "aoc"
 
-    # input_dir = "./data/dadesobertesGVA"
-    # organization_name = "gva"
+    input_dir = "./data/dadesobertesGVA"
+    organization_name = "gva"
 
     selected_package = None
 

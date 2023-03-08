@@ -141,7 +141,16 @@ def edit_dataset(dataset: dict, organization: dict, update: bool = False, resour
         "url": organization["source"] + "/explore/dataset/" + dataset["identifier"],
         "owner_org": organization["name"],
         "license_id": dataset["license"],
-        "spatial": json.dumps(organization["spatial"])}
+        "spatial": json.dumps(organization["spatial"])
+    }
+
+    for lang in ckan_dataset["title"].keys():
+        ckan_dataset["title"][lang] = organization["shortname"][lang] + ': ' + ckan_dataset["title"][lang]
+
+    # fix name if too long
+    if len(ckan_dataset["name"])>100:
+        print("WARNING: shortening name to <100")
+        ckan_dataset["name"] = ckan_dataset["name"][0:100].rsplit('-', 1)[0]
 
     # check resources
     ckan_resources = []

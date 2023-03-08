@@ -97,22 +97,22 @@ def edit_group(group: dict, update: bool = False) -> (int, dict):
     return success, result
 
 
-def add_datasets(groups: list) -> (int, dict):
-    datasets = {}
-    for group in groups:
-        group_datasets = [dataset.strip() for dataset in group["datasets"].split(" ") if dataset]
-        for dataset in group_datasets:
-            datasets[dataset] = datasets.get(dataset, []) + [group["name"]]
-    for dataset, group_ids in datasets.items():
-        print("\t\t - Adding groups to dataset {}: {}".format(dataset, ", ".join(group_ids)))
-        ckan_dataset = {"id": dataset, "groups": [{"name": group} for group in group_ids]}
-        print(ckan_dataset)
-        success, result = ckan_api_request(endpoint="package_patch", method="post",
-                                           token=API_TOKEN, data=ckan_dataset)
-        if success < 0:
-            raise Exception("Could not patch dataset " + str(result))
-        print(result)
-    return success, result
+# def add_datasets(groups: list) -> (int, dict):
+#     datasets = {}
+#     for group in groups:
+#         group_datasets = [dataset.strip() for dataset in group["datasets"].split(" ") if dataset]
+#         for dataset in group_datasets:
+#             datasets[dataset] = datasets.get(dataset, []) + [group["name"]]
+#     for dataset, group_ids in datasets.items():
+#         print("\t\t - Adding groups to dataset {}: {}".format(dataset, ", ".join(group_ids)))
+#         ckan_dataset = {"id": dataset, "groups": [{"name": group} for group in group_ids]}
+#         print(ckan_dataset)
+#         success, result = ckan_api_request(endpoint="package_patch", method="post",
+#                                            token=API_TOKEN, data=ckan_dataset)
+#         if success < 0:
+#             raise Exception("Could not patch dataset " + str(result))
+#         print(result)
+#     return success, result
 
 
 def main() -> int:
@@ -138,12 +138,13 @@ def main() -> int:
             else:
                 print("\t => * Update Failed *")
                 return -1
-    # add datasets
-    print("\t * Adding datasets to groups: ")
-    success, result = add_datasets(groups)
-    if success < 0:
-        print("\t => * Adding datasets Failed *")
-        return -1
+
+    # # add datasets
+    # print("\t * Adding datasets to groups: ")
+    # success, result = add_datasets(groups)
+    # if success < 0:
+    #     print("\t => * Adding datasets Failed *")
+    #     return -1
 
     print(" * Finished: \n\t - Created {} groups: {} "
           "\n\t - Updated {} groups: {}".format(len(created_groups), ', '.join(created_groups),

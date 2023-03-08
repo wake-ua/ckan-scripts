@@ -12,6 +12,7 @@
         "ca": "Dades obertes de l'ajuntament d'Alcoi",
         "en": "Open data of the Alcoy city council"
       },
+      "shortname": {"es": "Alcoy", "ca": "Alcoi", "en": "Alcoi"},
       "source": "https://opendata.alcoi.org/data",
       "type": "CKAN",
       "image": "logo_alcoy.png",
@@ -31,6 +32,7 @@
         "ca": "Dades obertes del govern d'Espanya",
         "en": "Open data from the government of Spain"
       },
+      "shortname": {"es": "INE", "ca": "INE", "en": "INE"},
       "source": "https://datos.gob.es/es/",
       "type": "custom",
       "image": "logo_ine.png",
@@ -49,6 +51,7 @@
         "ca": "El Portal de Dades Obertes de Torrent té com a objectiu oferir la disponibilitat i accés a les dades del nostre municipi.",
         "en": "The Torrent Open Data Portal aims to offer the availability and access to the data of our municipality"
       },
+      "shortname": {"es": "Torrent", "ca": "Torrent", "en": "Torrent"},
       "source": "http://datosabiertos.torrent.es",
       "type": "CKAN",
       "image": "logo_torrent.png",
@@ -58,15 +61,16 @@
     {
       "name": "sagunto",
       "title": {
-        "es": "Sagunt Open Data",
+        "es": "Sagunto Open Data",
         "ca": "Sagunt Open Data",
         "en": "Sagunt Open Data"
       },
       "description": {
         "es": "Portal de datos abiertos del ayuntamiento de Sagunto",
         "ca": "Portal de dades obertes de l'ajuntament de Sagunt",
-        "en": "Open data portal of the Sagunto city council"
+        "en": "Open data portal of the Sagunt city council"
       },
+      "shortname": {"es": "Sagunto", "ca": "Sagunt", "en": "Sagunt"},
       "source": "http://datosabiertos.sagunto.es",
       "type": "CKAN",
       "image": "logo_sagunto.png",
@@ -85,7 +89,8 @@
         "ca": "Dades obertes del Consorci de l'Administració Oberta de Catalunya",
         "en": "Open data of the Open Administration Consortium of Catalonia"
       },
-      "source": "http://dadesobertes.seu-e.cat",
+       "shortname": {"es": "Cataluña", "ca": "Catalunya", "en": "Catalonia"},
+     "source": "http://dadesobertes.seu-e.cat",
       "type": "CKAN",
       "image": "logo_aoc.png",
       "muniine": "",
@@ -103,6 +108,7 @@
         "ca": "Portal de dades obertes de València",
         "en": "Open data portal of Valencia"
       },
+      "shortname": {"es": "Valencia", "ca": "València", "en": "Valencia"},
       "source": "https://valencia.opendatasoft.com",
       "type": "OpenDataSoft",
       "image": "logo_valencia.png",
@@ -121,6 +127,7 @@
         "ca": "El Portal de Dades Obertes és l'espai digital en què la Generalitat publica en formats oberts les dades que produeix com a resultat de les activitats que realitza en l'exercici de les seues competències. L'objectiu d'aquest portal és facilitar a la ciutadania l'accés lliure i gratuït a les dades públiques perquè les puga utilitzar i reutilitzar per a aprofitar el seu potencial econòmic i social. Al mateix temps, la publicació d'aquestes dades contribueix a millorar i reforçar la transparència i la rendició de comptes de la Generalitat.",
         "en": "The Open Data Portal is the digital space in which the Generalitat publishes in open formats the data it produces as a result of the activities it carries out in the exercise of its powers. The objective of this portal is to provide citizens with free and open access to public data so that they can use and reuse them to take advantage of their economic and social potential. At the same time, the publication of these data contributes to improving and reinforcing the transparency and accountability of the Generalitat."
       },
+      "shortname": {"es": "GVA", "ca": "GVA", "en": "GVA"},
       "source": "https://dadesobertes.gva.es",
       "type": "CKAN",
       "image": "logo_gva.png",
@@ -132,13 +139,14 @@
       "title": {
         "es": "Diputación de Castellón Datos Abiertos",
         "ca": "Diputació de Castelló Dades Obertes",
-        "en": "Castellón Provincial Council Open Data"
+        "en": "Castellon Provincial Council Open Data"
       },
       "description": {
         "es": "El principal objetivo de este portal es poner a disposición de la sociedad y hacer públicos los datos que gestiona la administración, por lo que cualquier persona u organización pueda utilizarlas. ",
         "ca": "El principal objectiu d'aquest portal és posar a la disposició de la societat i fer públics les dades que gestiona l'administració, per la qual cosa qualsevol persona o organització puga utilitzar-les.",
         "en": "The main objective of this portal is to make available to society and make public the data managed by the administration, so that any person or organization can use them. "
       },
+      "shortname": {"es": "Castellón", "ca": "Castelló", "en": "Castellon"},
       "source": "https://datosabiertos.dipcas.es",
       "type": "OpenDataSoft",
       "image": "logo_dipcas.png",
