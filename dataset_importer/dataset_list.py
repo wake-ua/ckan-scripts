@@ -38,9 +38,9 @@ def read_dataset(file_path: str, organization: dict) -> dict:
         dataset["tags"] = ",".join(dataset.get("theme", []))
     dataset.pop('resources', None)
     if organization["type"] == "OpenDataSoft":
-        dataset["url"] = organization["source"] + "/explore/dataset/" + dataset["identifier"]
+        dataset["url"] = organization["source"] + dataset["identifier"]
     else:
-        dataset["url"] = organization["source"] + "/dataset/" + dataset["identifier"]
+        dataset["url"] = organization["source"] + dataset["identifier"]
     return dataset
 
 

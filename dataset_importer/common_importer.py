@@ -3,17 +3,16 @@ import requests
 from requests.exceptions import HTTPError
 import json
 import pprint
-# import csv
 import io
 import shutil
 import os
 import sys
 import datetime
-# from django.contrib.gis.geos import Polygon
+
+import dataset_importer_ckan
 
 # parameters from ENV
 from dotenv import load_dotenv
-
 load_dotenv('../.env')
 
 API_TOKEN = os.getenv('API_TOKEN')
@@ -26,13 +25,14 @@ LANGS = ['es', 'ca', 'en']
 
 
 def get_datasets_list(file_dir: str) -> list:
+
     # read the datasets files
     print(" - Read input dir: {}".format(file_dir))
 
     datasets = []
 
     for file in os.listdir(file_dir):
-        if file.endswith(".json"):
+        if file.startswith("meta_") and file.endswith(".json"):
             file_path = os.path.join(file_dir, file)
             datasets += [file_path]
 
@@ -55,37 +55,6 @@ def read_dataset(file_path: str) -> dict:
         dataset = json.load(jsonfile)
         dataset = dataset.get("result", dataset)
     return dataset
-
-
-def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {},
-                     params: dict = {}, files: list = [],
-                     content: str = 'application/json') -> (int, dict):
-    # set headers
-    headers = {'Authorization': token}
-    if content:
-        headers['Content-Type'] = content
-
-    # do the actual call
-    try:
-        if method == 'post':
-            response = requests.post('{}{}'.format(CKAN_API_URL, endpoint), json=data, params=params,
-                                     files=files, headers=headers)
-        else:
-            response = requests.get('{}{}'.format(CKAN_API_URL, endpoint), params=params, headers=headers)
-
-        # If the response was successful, no Exception will be raised
-        response.raise_for_status()
-        result = response.json()
-        return 0, result
-
-    except HTTPError as http_err:
-        print(f'\t HTTP error occurred: {http_err} {response.json()}')  # Python 3.6
-        result = {"http_error": http_err, "error": response.json()}
-    except Exception as err:
-        print(f'\t Other error occurred: {err}')  # Python 3.6
-        result = {"error": err}
-
-    return -1, result
 
 
 def get_translated_field(field: str, dataset: dict, default_value: str, org_name: str, mandatory: bool = False) -> dict:
@@ -132,58 +101,116 @@ def get_translated_field(field: str, dataset: dict, default_value: str, org_name
     return new_field
 
 
-def edit_dataset(dataset: dict, organization: dict, update: bool = False, resource_ids: dict ={}) -> (int, dict):
+def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {},
+                     params: dict = {}, files: list = [],
+                     content: str = 'application/json', verbose=True) -> (int, dict):
+    # set headers
+    headers = {'Authorization': token}
+    if content:
+        headers['Content-Type'] = content
+
+    # do the actual call
+    try:
+        if method == 'post':
+            response = requests.post('{}{}'.format(CKAN_API_URL, endpoint), json=data, params=params,
+                                     files=files, headers=headers)
+        else:
+            response = requests.get('{}{}'.format(CKAN_API_URL, endpoint), params=params, headers=headers)
+
+        # If the response was successful, no Exception will be raised
+        response.raise_for_status()
+        result = response.json()
+        return 0, result
+
+    except HTTPError as http_err:
+        if verbose:
+            print(f'\t HTTP error occurred: {http_err} {response.json()}')  # Python 3.6
+        result = {"http_error": http_err, "error": response.json()}
+    except Exception as err:
+        if verbose:
+            print(f'\t Other error occurred: {err}')  # Python 3.6
+        result = {"error": err}
+
+    return -1, result
+
+
+def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
     # map attributes to ckan dataset
     ckan_dataset = {
         "name": organization["name"] + "-" + dataset["identifier"],
         "title": get_translated_field("title", dataset, dataset["identifier"], organization["name"], True),
         "notes": get_translated_field("description", dataset, dataset["title"], organization["name"]),
-        "url": organization["source"] + "/explore/dataset/" + dataset["identifier"],
+        "url": organization["source"] + dataset["identifier"],
         "owner_org": organization["name"],
         "license_id": dataset["license"],
         "spatial": json.dumps(organization["spatial"])
     }
 
-    for lang in ckan_dataset["title"].keys():
-        ckan_dataset["title"][lang] = organization["shortname"][lang] + ': ' + ckan_dataset["title"][lang]
+    # original labels
+    if dataset.get("theme"):
+        ckan_dataset["original_tags"] = ", ".join(dataset.get("theme", []))
 
     # fix name if too long
-    if len(ckan_dataset["name"])>100:
+    if len(ckan_dataset["name"]) > 100:
         print("WARNING: shortening name to <100")
-        ckan_dataset["name"] = ckan_dataset["name"][0:100].rsplit('-', 1)[0]
+        ckan_dataset["name"] = ckan_dataset["name"][0:100]
 
     # check resources
     ckan_resources = []
+    resource_ids = get_resource_ids(ckan_dataset)
+
     for resource in dataset["resources"]:
         ckan_resource = {}
-        # ckan_resource["id"] = resource["id"]
 
         # handle urls
-        ckan_resource["url"] = resource["downloadUrl"][0]
-        other_urls = []
-        i = 0
-        for url in resource["downloadUrl"]:
-            if resource["mediaType"][i].lower().strip() == 'csv':
-                ckan_resource["url"] = url
-            else:
-                other_urls += [(resource["mediaType"][i].lower().strip(), url)]
-            i += 1
+        if isinstance(resource["downloadUrl"], str):
+            ckan_resource["url"] = resource["downloadUrl"]
+        else:
+            ckan_resource["url"] = resource["downloadUrl"][0]
+            for pair in zip(resource["downloadUrl"], resource["mediaType"]):
+                url = pair[0]
+                mimetype = pair[1]
+                if mimetype.lower().strip() == 'csv':
+                    ckan_resource["url"] = url
+                    break
 
-        ckan_resource["name"] = {lang: resource["path"].split('/')[-1].split('.')[0] for lang in LANGS}
+        if resource.get("name"):
+            ckan_resource["name"] = {lang: resource.get("name", "") for lang in LANGS}
+        elif resource.get("path"):
+            ckan_resource["name"] = {lang: resource.get("path", "").split('/')[-1].split('.')[0] for lang in LANGS}
+        else:
+            ckan_resource["name"] = {lang: resource.get("url", "").split('/')[-1].split('.')[0] for lang in LANGS}
 
-        if update:
-            resource_ids = get_resource_ids(ckan_dataset)
-            if resource_ids.get(ckan_resource["name"]["es"], False):
-                ckan_resource["id"] =resource_ids[ckan_resource["name"]["es"]]
+        # set re
+        if resource_ids:
+            ckan_resource["id"] = resource_ids[ckan_resource["url"]]
 
         ckan_resource["description"] = {lang: "" for lang in LANGS}
         ckan_resource["format"] = ckan_resource["url"].split('/')[-1]
-        # ckan_resource["size"] = resource["size"]
-        ckan_resource["mimetype"] = resource["path"].split('.')[-1]
+
+        mimetype = ""
+        if resource.get("path"):
+            mimetype = resource.get("path", "").split('.')[-1]
+        ckan_resource["mimetype"] = mimetype
+
         ckan_resources += [ckan_resource]
 
     if ckan_resources:
         ckan_dataset["resources"] = ckan_resources
+
+    # specific additions for CKAN dataset
+    if organization["type"] == "CKAN":
+        print(" > Complete metadata with specific CKAN info")
+        ckan_dataset = dataset_importer_ckan.complete_ckan_dataset(path, organization, ckan_dataset)
+
+    # prefix title with org name
+    for lang in ckan_dataset["title"].keys():
+        ckan_dataset["title"][lang] = organization["shortname"][lang] + ': ' + ckan_dataset["title"][lang]
+
+    return ckan_dataset
+
+
+def import_dataset(ckan_dataset: dict, update: bool = False) -> (int, dict):
 
     # call the endpoint
     if not update:
@@ -198,32 +225,29 @@ def edit_dataset(dataset: dict, organization: dict, update: bool = False, resour
 
 def get_resource_ids(dataset: dict) -> dict:
     resource_ids = {}
+
     success, result = ckan_api_request(endpoint="package_show", method="get",
-                                           token=API_TOKEN, params={"id": dataset["name"]})
-    ckan_dataset = result["result"]
-    for resource in ckan_dataset.get("resources", []):
-        resource_ids[resource["name"]["es"]] = resource["id"]
+                                               token=API_TOKEN, params={"id": dataset["name"]}, verbose=False)
+    if success >= 0:
+        ckan_dataset = result["result"]
+        for resource in ckan_dataset.get("resources", []):
+            resource_ids[resource["url"]] = resource["id"]
+
     return resource_ids
 
 
-def main() -> int:
+def dataset_has_resource_ids(ckan_dataset):
+    for resource in ckan_dataset["resources"]:
+        if resource.get('id'):
+            return True
+    return False
 
-    # get commmandline params
 
-    input_dir = "./data/valenciaOpenDataSoft"
-    organization_name = "valencia"
+def import_datasets(input_dir: str, organization_name: str, selected_package: str = None) -> (int, dict):
+    print("* Importing data for {} from {}".format(organization_name, input_dir))
 
-    # input_dir = "./data/datosAbiertosDipCas"
-    # organization_name = "dipcas"
-
-    selected_package = None
-    if len(sys.argv) > 2:
-        input_dir = sys.argv[1]
-        organization_name = sys.argv[2]
-        if len(sys.argv) > 3:
-            selected_package = sys.argv[3]
-
-    print(" * Reading {} datasets from {}".format(input_dir, organization_name))
+    if selected_package:
+        print(" => Importing ONLY selected package: {}".format(selected_package))
 
     # get the organization data
     organization = read_organization(organization_name)
@@ -235,7 +259,7 @@ def main() -> int:
 
     # read the input file
     dataset_files = get_datasets_list(input_dir)
-    print("\t -Got {} datasets".format(len(dataset_files)))
+    print("\t - Found {} dataset files".format(len(dataset_files)))
 
     # save the organizations
     for dataset_file in dataset_files:
@@ -243,38 +267,27 @@ def main() -> int:
         dataset = read_dataset(dataset_file)
 
         if selected_package and dataset["identifier"] != selected_package:
-            print(" \t\t Skipping dataset {} (!= {})".format(dataset["identifier"], selected_package))
             continue
 
-        print("\n * Creating DATA: {}".format(dataset["identifier"]))
-        success, result = edit_dataset(dataset, organization)
+        print("\n * Importing DATA: {}".format(dataset["identifier"]))
+        ckan_dataset = get_ckan_dataset(dataset_file, dataset, organization)
+
+        update = dataset_has_resource_ids(ckan_dataset)
+
+        success, result = import_dataset(ckan_dataset, update=update)
+
         if success >= 0:
-            print("\t * Created: {}...".format(str(result)[:500]))
-            created_datasets += [dataset["identifier"]]
-        else:
-            print("\t => Created Failed, trying UPDATE...")
-            success, result = edit_dataset(dataset, organization, update=True)
-            if success >= 0:
+            if update:
                 print("\t * Updated: {}...".format(str(result)[:500]))
                 updated_datasets += [dataset["identifier"]]
             else:
-                print("\t => * Update Failed *")
-                return -1
+                print("\t * Created: {}...".format(str(result)[:500]))
+                created_datasets += [dataset["identifier"]]
+        else:
+            print("\t => * Import Failed * update?", update)
+            return -1
 
     print(" \t - Created {} datasets: {} "
           "\n\t - Updated {} datasets: {}".format(len(created_datasets), ', '.join(created_datasets),
                                                   len(updated_datasets), ', '.join(updated_datasets)))
-
-    # success, total_datasets = ckan_api_request(endpoint="package_list", method="get", token=API_TOKEN)
-    # if success >= 0:
-    #     print("\n - CKAN Datasets ({}): {}".format(len(total_datasets["result"]), ', '.join(total_datasets["result"])))
-    #
-    # else:
-    #     print("\t => * ERROR: Retrieving All Datasets Failed *")
-    #     return -1
-
-    return 0
-
-
-if __name__ == '__main__':
-    sys.exit(main())
+    return 0, {}
