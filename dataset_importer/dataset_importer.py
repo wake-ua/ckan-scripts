@@ -6,18 +6,18 @@ from common_importer import import_datasets
 ORG_DIR = {
 
     # CKAN
-    "openDataAlcoi": "alcoi",
-    "datosAbiertosTorrent": "torrent",
-    "datosAbiertosSagunto": "sagunto",
-    "dadesObertesSeu-eCat": "aoc",
-    "dadesobertesGVA": "gva",
+    "opendata.alcoi.org": "alcoi",
+    "datosabiertos.torrent.es": "torrent",
+    "datosabiertos.sagunto.es": "sagunto",
+    "dadesobertes.seu-e.cat": "aoc",
+    "dadesobertes.gva.es": "gva",
 
     # OpenDataSoft
-    "valenciaOpenDataSoft": "valencia",
-    "datosAbiertosDipCas": "dipcas",
+    "valencia.opendatasoft.com": "valencia",
+    "datosabiertos.dipcas.es": "dipcas",
 
     # INE
-    # "INE": "ine"
+    "servicios.ine.es": "ine"
 }
 
 BASE_DIR = "./data"
@@ -37,6 +37,7 @@ def main() -> int:
 
     for input_dir in input_dirs:
         org = ORG_DIR[input_dir.rsplit('/', 1)[-1]]
+        print(org)
         import_datasets(input_dir, org, selected_package)
     return 0
 

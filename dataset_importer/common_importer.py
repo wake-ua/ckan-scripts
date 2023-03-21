@@ -89,7 +89,7 @@ def get_translated_field(field: str, dataset: dict, default_value: str, org_name
 
     if mandatory:
         langs = list(new_field.keys())
-        some_value = dataset["identifier"]
+        some_value = dataset["id_portal"]
         for lang in langs:
             if len(new_field[lang]) > 0:
                 some_value = new_field[lang]
@@ -137,14 +137,17 @@ def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {},
 def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
     # map attributes to ckan dataset
     ckan_dataset = {
-        "name": organization["name"] + "-" + dataset["identifier"],
-        "title": get_translated_field("title", dataset, dataset["identifier"], organization["name"], True),
+        "name": dataset["id_custom"] + "-" + organization["name"] + "-" + dataset["id_portal"],
+        "title": get_translated_field("title", dataset, dataset["id_portal"], organization["name"], True),
         "notes": get_translated_field("description", dataset, dataset["title"], organization["name"]),
-        "url": organization["source"] + dataset["identifier"],
+        "url": organization["source"] + dataset["id_portal"],
         "owner_org": organization["name"],
-        "license_id": dataset["license"],
-        "spatial": json.dumps(organization["spatial"])
+        "license_id": dataset.get("license", "")
     }
+
+    # spatial if existing
+    if organization["spatial"]:
+        ckan_dataset["spatial"]: json.dumps(organization["spatial"])
 
     # original labels
     if dataset.get("theme"):
@@ -159,6 +162,7 @@ def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
     ckan_resources = []
     resource_ids = get_resource_ids(ckan_dataset)
 
+    res_num = 0
     for resource in dataset["resources"]:
         ckan_resource = {}
 
@@ -176,17 +180,27 @@ def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
 
         if resource.get("name"):
             ckan_resource["name"] = {lang: resource.get("name", "") for lang in LANGS}
-        elif resource.get("path"):
-            ckan_resource["name"] = {lang: resource.get("path", "").split('/')[-1].split('.')[0] for lang in LANGS}
+        # elif resource.get("path"):
+        #     ckan_resource["name"] = {lang: resource.get("path", "").split('/')[-1].split('.')[0] for lang in LANGS}
+        elif len(ckan_resource.get("url", "").split('/')[-1].split('.')) == 2:
+            ckan_resource["name"] = {lang: ckan_resource.get("url", "").split('/')[-1].split('.')[0] for lang in LANGS}
         else:
-            ckan_resource["name"] = {lang: resource.get("url", "").split('/')[-1].split('.')[0] for lang in LANGS}
+            if len(dataset["resources"])>1:
+                ckan_resource["name"] = {lang: dataset["id_portal"][0:80].rsplit('-', 1)[0] + '-file-' + str(res_num)
+                                         for lang in LANGS}
+            else:
+                ckan_resource["name"] = {lang: dataset["id_portal"][0:80].rsplit('-', 1)[0] for lang in LANGS}
+            print(ckan_resource["name"])
 
         # set re
         if resource_ids:
             ckan_resource["id"] = resource_ids[ckan_resource["url"]]
 
         ckan_resource["description"] = {lang: "" for lang in LANGS}
+
         ckan_resource["format"] = ckan_resource["url"].split('/')[-1]
+        if ckan_resource["format"].find('.csv') >= 0:
+            ckan_resource["format"] = 'csv'
 
         mimetype = ""
         if resource.get("path"):
@@ -194,6 +208,7 @@ def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
         ckan_resource["mimetype"] = mimetype
 
         ckan_resources += [ckan_resource]
+        res_num += 1
 
     if ckan_resources:
         ckan_dataset["resources"] = ckan_resources
@@ -266,10 +281,10 @@ def import_datasets(input_dir: str, organization_name: str, selected_package: st
         print("* Reading dataset {}".format(dataset_file))
         dataset = read_dataset(dataset_file)
 
-        if selected_package and dataset["identifier"] != selected_package:
+        if selected_package and dataset["id_portal"] != selected_package:
             continue
 
-        print("\n * Importing DATA: {}".format(dataset["identifier"]))
+        print("\n * Importing DATA: {} {}".format(dataset["id_portal"], dataset["id_custom"]))
         ckan_dataset = get_ckan_dataset(dataset_file, dataset, organization)
 
         update = dataset_has_resource_ids(ckan_dataset)
@@ -279,15 +294,16 @@ def import_datasets(input_dir: str, organization_name: str, selected_package: st
         if success >= 0:
             if update:
                 print("\t * Updated: {}...".format(str(result)[:500]))
-                updated_datasets += [dataset["identifier"]]
+                updated_datasets += [result["result"]["name"]]
             else:
                 print("\t * Created: {}...".format(str(result)[:500]))
-                created_datasets += [dataset["identifier"]]
+                created_datasets += [result["result"]["name"]]
         else:
             print("\t => * Import Failed * update?", update)
             return -1
 
+
     print(" \t - Created {} datasets: {} "
-          "\n\t - Updated {} datasets: {}".format(len(created_datasets), ', '.join(created_datasets),
-                                                  len(updated_datasets), ', '.join(updated_datasets)))
+          "\n\t - Updated {} datasets: {}".format(len(created_datasets), ', '.join([CKAN_URL + "/dataset/" + dataset for dataset in created_datasets]),
+                                                  len(updated_datasets), ', '.join([CKAN_URL + "/dataset/" + dataset for dataset in updated_datasets])))
     return 0, {}

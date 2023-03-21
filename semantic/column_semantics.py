@@ -56,9 +56,8 @@ def get_resources_list() -> (int, list):
     return success, result
 
 
-def delete_datastore_resource(resource_id: str) -> (int, list):
+def delete_datastore_resource(resource_id: str) -> (int, dict):
     print( "\t * DELETE *", resource_id)
-    print(get_datastore_info(resource_id))
     success, result = ckan_api_request("datastore_delete", "post", API_TOKEN,
                                        data={"resource_id": resource_id, 'force': True})
     if success >= 0:
@@ -75,7 +74,9 @@ def check_resources_list(resource_ids) -> (int, list):
                 print(result["http_error"].errno)
                 success, result = delete_datastore_resource(resource_id)
                 print(" => DELETED resource: " + resource_id, success, result)
-                raise Exception("ERROR: Found deleted resource", resource_id)
+                # raise Exception("ERROR: Found deleted resource", resource_id)
+            else:
+                raise Exception("ERROR: Uknown error check resource", resource_id, success, result)
 
     return success, result
 
