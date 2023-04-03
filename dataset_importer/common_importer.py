@@ -142,12 +142,29 @@ def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
         "notes": get_translated_field("description", dataset, dataset["title"], organization["name"]),
         "url": organization["source"] + dataset["id_portal"],
         "owner_org": organization["name"],
-        "license_id": dataset.get("license", "")
+        "license_id": dataset.get("license", organization.get("license_id"))
     }
+
+    # fix url for the INE
+    # TODO fix licenses for INE
+    if organization["name"] == "ine":
+        ckan_dataset["url"] = "https://www.ine.es/jaxiT3/Tabla.htm?t=" + dataset["id_portal"].split('_')[-1]
+        for lang, value in ckan_dataset["notes"].items():
+            if ckan_dataset["notes"][lang].startswith(': '):
+                ckan_dataset["notes"][lang] = ckan_dataset["notes"][lang][2:]
+
+
+    # custom licenses
+    if ckan_dataset["license_id"].lower().strip() == "http://www.opendefinition.org/licenses/cc-by":
+        ckan_dataset["license_id"] = "cc-by"
 
     # spatial if existing
     if organization["spatial"]:
-        ckan_dataset["spatial"]: json.dumps(organization["spatial"])
+        ckan_dataset["spatial"] = json.dumps(organization["spatial"])
+
+    # location
+    if organization.get("territorio"):
+        ckan_dataset["location"] = organization["territorio"]
 
     # original labels
     if dataset.get("theme"):
@@ -192,7 +209,7 @@ def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
                 ckan_resource["name"] = {lang: dataset["id_portal"][0:80].rsplit('-', 1)[0] for lang in LANGS}
             print(ckan_resource["name"])
 
-        # set re
+        # set resource id
         if resource_ids:
             ckan_resource["id"] = resource_ids[ckan_resource["url"]]
 

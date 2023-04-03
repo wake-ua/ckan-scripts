@@ -103,20 +103,31 @@ def edit_vocabulary(name: str, tags: list, update: bool = False) -> (int, dict):
 
 
 def add_datasets_groups(tags: list) -> (int, dict):
+    # maping with the indexes
+    success, result = ckan_api_request(endpoint="package_list", method="get", token=API_TOKEN)
+    package_list = result["result"]
+
+
     datasets = {}
     not_found = []
 
     for tag in tags:
         group = tag["group"]
         group_datasets = [dataset.strip() for dataset in tag["datasets"].split(" ") if dataset]
-        for dataset in group_datasets:
-            datasets[dataset] = datasets.get(dataset, []) + [group]
+        for dataset_name in group_datasets:
+            matches = [p for p in package_list if dataset_name.startswith(p.split('-', 1)[-1])
+                          and len(dataset_name) >= len(p.split('-', 1)[-1])]
+
+            if len(matches) == 0:
+                not_found += [dataset_name]
+                continue
+
+            dataset_id = matches[0]
+
+            datasets[dataset_id] = datasets.get(dataset_id, []) + [group]
+
     for dataset, group_ids in datasets.items():
         name = dataset
-        # fix name if too long
-        if len(name) > 100:
-            name = name[0:100].rsplit('-', 1)[0]
-            print("WARNING: shortening name to <100: " + name)
 
         print("\t\t - Adding groups to dataset {}: {}".format(name, ", ".join(group_ids)))
         ckan_dataset = {"id": name, "groups": [{"name": group} for group in set(group_ids)]}
@@ -136,13 +147,26 @@ def add_datasets_groups(tags: list) -> (int, dict):
 
 
 def add_datasets(tags: list) -> (int, dict):
+    # maping with the indexes
+    success, result = ckan_api_request(endpoint="package_list", method="get", token=API_TOKEN)
+    package_list = result["result"]
+
     cv_field = 'tag_string_schemaorg'
     not_found = []
     datasets = {}
     for tag in tags:
         tag_datasets = [dataset.strip() for dataset in tag["datasets"].split(" ") if dataset]
         for dataset_name in tag_datasets:
-            datasets[dataset_name] = datasets.get(dataset_name, {"id": dataset_name})
+            matches = [p for p in package_list if dataset_name.startswith(p.split('-', 1)[-1])
+                          and len(dataset_name) >= len(p.split('-', 1)[-1])]
+
+            if len(matches) == 0:
+                not_found += [dataset_name]
+                continue
+
+            dataset_id = matches[0]
+
+            datasets[dataset_name] = datasets.get(dataset_name, {"id": dataset_id})
             datasets[dataset_name][cv_field] = datasets[dataset_name].get(cv_field, []) + \
                                                [v.strip() + "-" + k for k, v in tag["tag_vocabulary"].items()]
             for lang, tag_strings in tag["tag"].items():
@@ -152,10 +176,6 @@ def add_datasets(tags: list) -> (int, dict):
     for name, dataset in datasets.items():
         dataset[cv_field] = ','.join(dataset[cv_field])
         dataset["tag_string"] = ','.join(dataset["tag_string"])
-        # fix name if too long
-        if len(dataset["id"]) > 100:
-            dataset["id"] = dataset["id"][0:100].rsplit('-', 1)[0]
-            print("WARNING: shortening name to <100: " + dataset["id"])
 
         print("\t\t - Adding CV tags to dataset {}: {}".format(name, dataset[cv_field]))
         print("\t\t - Adding free tags to dataset {}: {}".format(name, dataset["tag_string"]))

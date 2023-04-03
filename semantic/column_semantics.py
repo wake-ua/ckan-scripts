@@ -57,7 +57,7 @@ def get_resources_list() -> (int, list):
 
 
 def delete_datastore_resource(resource_id: str) -> (int, dict):
-    print( "\t * DELETE *", resource_id)
+    print("\t * DELETE *", resource_id)
     success, result = ckan_api_request("datastore_delete", "post", API_TOKEN,
                                        data={"resource_id": resource_id, 'force': True})
     if success >= 0:
@@ -65,54 +65,69 @@ def delete_datastore_resource(resource_id: str) -> (int, dict):
     return success, result
 
 
-def check_resources_list(resource_ids) -> (int, list):
-    for resource_id in resource_ids:
-        success, result = ckan_api_request("resource_show", "get", API_TOKEN, params={"id": resource_id})
-        if success < 0:
-            if result["code"] == 404:
-                print("ERROR: NOT FOUND \t" + resource_id)
-                print(result["http_error"].errno)
-                success, result = delete_datastore_resource(resource_id)
-                print(" => DELETED resource: " + resource_id, success, result)
-                # raise Exception("ERROR: Found deleted resource", resource_id)
-            else:
-                raise Exception("ERROR: Uknown error check resource", resource_id, success, result)
+def check_resource(resource_id: str) -> (int, list):
+    success, result = ckan_api_request("resource_show", "get", API_TOKEN, params={"id": resource_id})
+    if success < 0:
+        if result["code"] == 404:
+            print("ERROR: NOT FOUND \t" + resource_id)
+            print(result["http_error"].errno)
+            success, result = delete_datastore_resource(resource_id)
+            print(" => DELETED resource: " + resource_id, success, result)
+            raise Exception("ERROR: Found deleted resource", resource_id)
+        else:
+            raise Exception("ERROR: Uknown error check resource", resource_id, success, result)
 
     return success, result
 
 
 def get_datastore_info(resource_ids: list) -> list:
     datastore_info = []
+    i = 1
     for resource_id in resource_ids:
+        print("{}/{}\t".format(i, len(resource_ids)), resource_id)
+
+        success, result = check_resource(resource_id)
+        resource_data = result['result']
+
+        print('\t', resource_data['package_id'], resource_data['name']['es'])
+        success, result = ckan_api_request("package_show", "get", API_TOKEN, params={"id": resource_data['package_id']})
+        package_data = result['result']
+
         # success, result = ckan_api_request("datastore_info", "post", API_TOKEN, data={"id": id})
-        success, result = ckan_api_request("datastore_search", "post", API_TOKEN, data={"resource_id": resource_id, "limit": 1})
+        success, result = ckan_api_request("datastore_search", "post", API_TOKEN,
+                                           data={"resource_id": resource_id, "limit": 1})
         if success < 0:
             raise Exception("ERROR: Cannot find dataset", resource_id)
         for field in result['result']['fields']:
-            field_row = {'id': field.get('id', ''),
-                         'type': field.get('type', ''),
-                         'label': field.get('info', {}).get('label', ''),
-                         'notes': field.get('info', {}).get('notes', ''),
-                         'type_override':  field.get('info', {}).get('type_override', ''),
-                         'resource': '{}resource_show?id={}'.format(CKAN_API_URL, resource_id)
-                         }
+
+            field_row = {
+                            'id': field.get('id', ''),
+                            'type': field.get('type', ''),
+                            'label': field.get('info', {}).get('label', ''),
+                            'notes': field.get('info', {}).get('notes', ''),
+                            'type_override':  field.get('info', {}).get('type_override', ''),
+                            'example': '',
+                            'resource': resource_data["url"],
+                            'dataset_id ': package_data['name'],
+                            'dataset ': package_data['url'],
+                            'tags': [t["name"] for t in package_data["tags"] if t["name"].endswith("-es")],
+                            'vocabulary': package_data.get("tag_string_schemaorg"),
+                            'groups': [g["name"] for g in package_data["groups"]],
+                            'organization': package_data["organization"]["name"]
+            }
+            if len(result['result']['records']) > 0:
+                field_row['example'] = result['result']['records'][0].get(field.get('id', ''))
 
             datastore_info += [field_row]
+        i += 1
     return datastore_info
 
 
 def main() -> int:
-    resource_id = "b35a2ac8-b5ad-433c-a01c-6dad873e3153"
-
-    # read the input file
-    # columns_dict = read_tags(FILE_PATH)
 
     # get_all_resources_ids_in_datastore
     success, result = get_resources_list()
     resource_ids = result
-
-    # check resources status
-    check_resources_list(resource_ids)
 
     # gather datasets columns
     datastore_info = get_datastore_info(resource_ids)

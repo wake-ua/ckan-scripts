@@ -75,7 +75,8 @@ def edit_organization(org: dict, update: bool = False) -> (int, dict):
         "title": org["title"],
         "description": org["description"],
         "image_display_url": "{}/{}".format(CKAN_UPLOADS_URL, org["image"]),
-        "image_url": "{}".format(org["image"])
+        "image_url": "{}".format(org["image"]),
+        "source": org.get("source", "")
     }
 
     # copy image to the uploads

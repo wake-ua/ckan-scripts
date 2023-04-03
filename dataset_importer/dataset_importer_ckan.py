@@ -107,6 +107,10 @@ def complete_ckan_dataset(path: str, organization: dict, ckan_dataset: dict) -> 
         for field in ["format", "mimetype", "size"]:
             ckan_resource[field] = full_resource[field]
 
+        # unify resource formats
+        if ckan_resource["format"].strip().lower() == "shape":
+            ckan_resource["format"] = "Shape"
+
         ckan_resources += [ckan_resource]
 
     if ckan_resources:
