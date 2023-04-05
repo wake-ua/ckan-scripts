@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 import requests
 from requests.exceptions import HTTPError
-import json
-import pprint
 import csv
-import shutil
 import os
 import sys
 
@@ -125,9 +122,12 @@ def get_datastore_info(resource_ids: list) -> list:
 
 def main() -> int:
 
-    # get_all_resources_ids_in_datastore
-    success, result = get_resources_list()
-    resource_ids = result
+    if len(sys.argv) > 1:
+        resource_ids = [sys.argv[1]]
+    else:
+        # get_all_resources_ids_in_datastore
+        success, result = get_resources_list()
+        resource_ids = result
 
     # gather datasets columns
     datastore_info = get_datastore_info(resource_ids)

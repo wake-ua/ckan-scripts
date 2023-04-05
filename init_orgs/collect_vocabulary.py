@@ -2,9 +2,6 @@
 import requests
 from requests.exceptions import HTTPError
 import json
-import pprint
-import csv
-import shutil
 import os
 import sys
 
@@ -20,7 +17,6 @@ FILE_PATH = os.getenv('ORGANIZATION_LIST_PATH')
 OUTPUT_PATH = "./data/semantic"
 
 
-
 def read_organizations(file_path: str) -> list:
     # read the organizations file
     print(" - Read input file: {}".format(file_path))
@@ -31,16 +27,17 @@ def read_organizations(file_path: str) -> list:
         organizations = json.load(jsonfile)["organizations"]
 
     print(" \t => Read {} organization(s): {}".format(len(organizations),
-          ', '.join([org['name'] for org in organizations])))
+                                                      ', '.join([org['name'] for org in organizations])))
 
     return organizations
 
 
-def ckan_api_request(url: str, endpoint: str, method: str, token: str, data: dict = {}, params: dict = {}) -> (int, dict):
+def ckan_api_request(url: str, endpoint: str, method: str, token: str, data: dict = {}, params: dict = {}) -> (
+int, dict):
     # set headers
     headers = {'Authorization': token}
 
-    result = {}
+    response = {}
 
     # do the actual call
     try:
@@ -65,7 +62,6 @@ def ckan_api_request(url: str, endpoint: str, method: str, token: str, data: dic
 
 
 def main() -> int:
-
     # read the input file
     organizations = read_organizations(FILE_PATH)
 
@@ -77,7 +73,8 @@ def main() -> int:
             results_dict[organization["name"]] = {}
             url = "{}/api/3/action/".format(organization["source"])
 
-            code, result = ckan_api_request(url, 'package_search?facet.field=["tags", "groups"]&facet.limit=-1', "get", API_TOKEN)
+            code, result = ckan_api_request(url, 'package_search?facet.field=["tags", "groups"]&facet.limit=-1', "get",
+                                            API_TOKEN)
             facets = result["result"]["search_facets"]
             tags = [(i["name"], i["count"]) for i in facets["tags"]["items"]]
             groups = [(i["name"], i["count"]) for i in facets["groups"]["items"]]
