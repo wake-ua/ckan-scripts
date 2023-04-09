@@ -97,7 +97,8 @@ def check_resources(resource_ids: list) -> (int, list):
                 print(result["http_error"].errno)
                 success, result = delete_datastore_resource(resource_id)
                 print(" => DELETED resource: " + resource_id, success, result)
-                raise Exception("ERROR: Found deleted resource", resource_id)
+                # raise Exception("ERROR: Found deleted resource", resource_id)
+                continue
             else:
                 raise Exception("ERROR: Unknown error check resource", resource_id, success, result)
 
@@ -136,7 +137,9 @@ def reload_resources(resources, force=False):
                             error_log.write("{}{}\n".format(resource_id, error_message))
                             # retry on network error
                             if error_message.find("HTTPSConnectionPool") >= 0 \
-                                    and error_message.find("NewConnectionError") >= 0:
+                                    or error_message.find("psycopg2") >= 0 \
+                                    or error_message.find("status=500") >= 0 \
+                                    or error_message.find("HTTPConnection") >= 0:
                                 resources_to_upload += 1
                         else:
                             resources_to_upload += 1
@@ -162,19 +165,19 @@ def main() -> int:
     print("Found {} resources in datastore".format(len(resource_ids)))
 
     # delete removed resources
-    # check_resources(resource_ids)
+    check_resources(resource_ids)
 
-    # check all CSV resources are in the datastore
-    csv_resources_missing = get_csv_resources_list()
-    print("Found {} resources missing in datastore: {}...".format(len(csv_resources_missing),
-                                                    [(r['id'], r['package_id']) for r in csv_resources_missing[0:10]]))
-    missing_matches = [(r['id'], r['package_id']) for r in csv_resources_missing if r['id'] in resource_ids]
-    print(len(missing_matches), missing_matches[0:10])
-
-    dataset_list = list(set([r['package_id'] for r in csv_resources_missing]))
-    print(" - Missing resources result in {} datasets".format(len(dataset_list)))
-
-    reload_resources(csv_resources_missing)
+    # # check all CSV resources are in the datastore
+    # csv_resources_missing = get_csv_resources_list()
+    # print("Found {} resources missing in datastore: {}...".format(len(csv_resources_missing),
+    #                                                 [(r['id'], r['package_id']) for r in csv_resources_missing[0:10]]))
+    # missing_matches = [(r['id'], r['package_id']) for r in csv_resources_missing if r['id'] in resource_ids]
+    # print(len(missing_matches), missing_matches[0:10])
+    #
+    # dataset_list = list(set([r['package_id'] for r in csv_resources_missing]))
+    # print(" - Missing resources result in {} datasets".format(len(dataset_list)))
+    #
+    # reload_resources(csv_resources_missing)
     return 0
 
 

@@ -1,0 +1,34 @@
+label,description,columns,type
+actividades,Actividades que se pueden realizar,"actividades, activitat, activitats",text
+agencia_de_viajes,"empresa que presta servicios de organización, planificación, desarrollo y venta de productos o servicios de naturaleza y fines turísticos entre proveedores y clientes finales.",agencia_de_viajes,text
+cadena,Nombre de la cadena hotelera a la que pertenece el establecimiento,cadena,text
+categoria,Sistema de clasificación utilizado para indicar a los usuarios la calidad de un establecimiento alojativo. A través de el Nº de estrellas,"cod. categoria, categoria",text
+cod_cadena,Código de la cadena hotelera a la que pertenece el establecimiento,cod. cadena,text
+cod_estado,Código de estado,"cod.estado",text
+cod_municipio,Código del municipio,"cod. municipio, muni_codigo, codmun",text
+cod_provincia,Código de la provincia,"cod. provincia, prov_codigo",text
+cod_tipo_via,Código de tipo de vía,cod. tipo via,text
+codigo_postal,Código postal,"codigo_postal, cp, c_p, c. postal, c.p.",text
+comarca,Nombre de la comarca,comarca,text
+dias_periodo,Días de la semana en que permanece abierto (de lunes a domingo),dias periodo,text
+direccion,Dirección del establecimiento,"direccion, adreca, adreca_completa, adreca / direccion, direccio",text
+email,Email del establecimiento,"email, e_mail, mail",text
+en_localidades,Localidades en que se desarrollan las actividades,en_localidades,text
+estado,Estado del establecimiento (Alta o cierre temporal),estado,text
+fax,Fax del establecimiento,fax,text
+fecha_alta,fecha de alta en el registro,fecha alta,text
+fecha_baja,Fecha de baja en el registro,fecha baja,text
+fecha_csv,Fecha de descarga del csv,fecha_csv,text
+habitaciones,"En hotelería, espacio destinado a dormir ofrecido por un establecimiento hotelero y cuyo tipo lo determinan los metros cuadrados disponibles, el número de camas y los servicios complementarios de los que disponga.","hab, habitaciones",text
+mes,mes del año,mes,text
+municipio,Municipio en que está ubicado,municipio,text
+nombre_legal,"El nombre oficial de la organización, por ejemplo, el nombre de la empresa registrada.",nombre,text
+periodo,Periodo del año en que permanece abierto,periodo,text
+plazas,El número de plazas equivale al número de personas que pueden pernoctar en las camas instaladas permanentemente en el mismo,plazas,text
+provincia,Provincia en que está ubicado,provincia,text
+signatura,Número de inscripción en el Registro,signatura,text
+telefono,Teléfono del establecimiento,"telefono, telefonos",text
+tipo_de_establecimiento,"Nombre del grupo al que pertenece el establecimiento (hotel (H), pensión (P), albergue(A), camping (C), casa rural (R) hostal (HS) hotel-apartamento (HA), hostal-residencia (RS), albergue ciudad (AJ), Mayorista (Mm), minorista (m)","grupo, cod. modalidad, modalidad",text
+tipo_via,Tipo de vía,tipo via,text
+via,Nombre de la vía,via,text
+web,Web del establecimiento,web,text
