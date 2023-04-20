@@ -2,7 +2,7 @@ import json
 import sys
 from django.contrib.gis.geos import Polygon
 
-ORG_FILE = "./data/organization_list.json"
+ORG_FILE = "../data/organization_list.json"
 GEOJSON_FILE = "./data/ca_municipios_20230105.geojson"
 
 

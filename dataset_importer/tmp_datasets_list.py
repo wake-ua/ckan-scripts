@@ -1,53 +1,20 @@
 #!/usr/bin/env python
-import requests
-from requests.exceptions import HTTPError
 import os
 import sys
 import csv
+from scripts.commons import commons
 
-import subprocess
-import time
 
 # parameters from ENV
 from dotenv import load_dotenv
 
 load_dotenv('../.env')
 
-API_TOKEN = os.getenv('API_TOKEN')
 CKAN_URL = os.getenv('CKAN_URL')
-CKAN_CONFIG = os.getenv('CKAN_CONFIG')
 
 # parameters
 CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
 OUTPUT_PATH = "./output/dataset_list.csv"
-
-
-def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {}, params: dict = {}) -> (int, dict):
-    # set headers
-    headers = {'Authorization': token}
-
-    result = {}
-
-    # do the actual call
-    try:
-        if method == 'post':
-            response = requests.post('{}{}'.format(CKAN_API_URL, endpoint), json=data, params=params, headers=headers)
-        else:
-            response = requests.get('{}{}'.format(CKAN_API_URL, endpoint), params=params, headers=headers)
-
-        # If the response was successful, no Exception will be raised
-        response.raise_for_status()
-        result = response.json()
-        return 0, result
-
-    except HTTPError as http_err:
-        print(f'\t HTTP error occurred: {http_err} {response.json().get("error")}')  # Python 3.6
-        result = {"code": response.status_code, "http_error": http_err, "error": response.json().get("error")}
-    except Exception as err:
-        print(f'\t Other error occurred: {err}')  # Python 3.6
-        result = {"error": err}
-
-    return -1, result
 
 
 def save_datasets_list() -> int:
@@ -55,14 +22,14 @@ def save_datasets_list() -> int:
     writer = None
     step = 500
 
-    success, result = ckan_api_request("organization_list", "get", API_TOKEN)
+    success, result = commons.ckan_api_request("organization_list", "get")
     organizations = result['result']
 
     with open(OUTPUT_PATH, 'w') as f:
         for organization in organizations:
             print("\n * Organization", organization)
             params = {"q": "organization:{}".format(organization), "rows": step}
-            success, result = ckan_api_request("package_search", "get", API_TOKEN, params=params)
+            success, result = commons.ckan_api_request("package_search", "get", params=params)
             if success < 0:
                 raise("ERROR: Cannot retrieve datasets", organization)
             total = result['result']['count']
@@ -70,7 +37,7 @@ def save_datasets_list() -> int:
 
             while len(datasets) < total and len(result['result']['results']) > 0:
                 params = {"q": "organization:{}".format(organization), "rows": step, "start": len(datasets)}
-                success, result = ckan_api_request("package_search", "get", API_TOKEN, params=params)
+                success, result = commons.ckan_api_request("package_search", "get", params=params)
                 if success < 0:
                     raise ("ERROR: Cannot retrieve datasets")
                 datasets += result['result']['results']
@@ -97,8 +64,8 @@ def save_datasets_list() -> int:
                             + '"',
                     'original_tags': dataset.get("original_tags",'')
                 }
-                if len(row['groups'])>2:
-                    row['ok'] = 1
+                # if len(row['groups'])>2:
+                #     row['ok'] = 1
                 print(row.values())
 
                 if not writer:

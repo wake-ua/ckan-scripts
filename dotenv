@@ -1,5 +1,16 @@
 
-# init orgs script
+# init orgs and groups input data
+DATA_PATH = <input_path>
+
+ORGANIZATION_LIST_PATH=${DATA_PATH}/CKAN_organizations.json
+GROUP_LIST_PATH=${DATA_PATH}/CKAN_groups.csv
+VOCABULARY_LIST_PATH=${DATA_PATH}/CKAN_vocabulary.csv
+TAG_LIST_PATH=${DATA_PATH}/CKAN_tags.csv
+DATASET_LIST_PATH=${DATA_PATH}/CKAN_datasets.csv
+COLUMN_LIST_PATH=${DATA_PATH}/CKAN_column_labels.csv
+IMAGES_PATH=${DATA_PATH}/images
+
+# CKAN data paths
 GROUP_IMAGE_UPLOADS_PATH=<path>
 
 # API Access

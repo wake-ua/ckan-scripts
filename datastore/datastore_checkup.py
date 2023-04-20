@@ -1,18 +1,14 @@
 #!/usr/bin/env python
-import requests
-from requests.exceptions import HTTPError
 import os
 import sys
-
 import subprocess
-import time
+from scripts.commons import commons
 
 # parameters from ENV
 from dotenv import load_dotenv
 
 load_dotenv('../.env')
 
-API_TOKEN = os.getenv('API_TOKEN')
 CKAN_URL = os.getenv('CKAN_URL')
 CKAN_CONFIG = os.getenv('CKAN_CONFIG')
 
@@ -21,36 +17,8 @@ CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
 OUTPUT_PATH = "./output/datastore_checkup.txt"
 
 
-def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {}, params: dict = {}) -> (int, dict):
-    # set headers
-    headers = {'Authorization': token}
-
-    result = {}
-
-    # do the actual call
-    try:
-        if method == 'post':
-            response = requests.post('{}{}'.format(CKAN_API_URL, endpoint), json=data, params=params, headers=headers)
-        else:
-            response = requests.get('{}{}'.format(CKAN_API_URL, endpoint), params=params, headers=headers)
-
-        # If the response was successful, no Exception will be raised
-        response.raise_for_status()
-        result = response.json()
-        return 0, result
-
-    except HTTPError as http_err:
-        print(f'\t HTTP error occurred: {http_err} {response.json().get("error")}')  # Python 3.6
-        result = {"code": response.status_code, "http_error": http_err, "error": response.json().get("error")}
-    except Exception as err:
-        print(f'\t Other error occurred: {err}')  # Python 3.6
-        result = {"error": err}
-
-    return -1, result
-
-
 def get_datastore_resources_list() -> (int, list):
-    success, result = ckan_api_request("wakeua_list_datastore_resources", "get", API_TOKEN)
+    success, result = commons.ckan_api_request("wakeua_list_datastore_resources", "get")
     if success >= 0:
         return success, result['result']
     return success, result
@@ -59,15 +27,15 @@ def get_datastore_resources_list() -> (int, list):
 def get_csv_resources_list() -> (int, list):
     step = 500
     params = {"q": "res_format:CSV", "rows": step}
-    success, result = ckan_api_request("package_search", "get", API_TOKEN, params=params)
+    success, result = commons.ckan_api_request("package_search", "get", params=params)
     if success < 0:
-        raise("ERROR: Cannot retrieve datasets")
+        raise ("ERROR: Cannot retrieve datasets")
     total = result['result']['count']
     datasets = result['result']['results']
 
     while len(datasets) < total and len(result['result']['results']) > 0:
         params = {"q": "res_format:CSV", "rows": step, "start": len(datasets)}
-        success, result = ckan_api_request("package_search", "get", API_TOKEN, params=params)
+        success, result = commons.ckan_api_request("package_search", "get", params=params)
         if success < 0:
             raise ("ERROR: Cannot retrieve datasets")
         datasets += result['result']['results']
@@ -81,8 +49,8 @@ def get_csv_resources_list() -> (int, list):
 
 def delete_datastore_resource(resource_id: str) -> (int, dict):
     print("\t * DELETE *", resource_id)
-    success, result = ckan_api_request("datastore_delete", "post", API_TOKEN,
-                                       data={"resource_id": resource_id, 'force': True})
+    success, result = commons.ckan_api_request("datastore_delete", "post",
+                                               data={"resource_id": resource_id, 'force': True})
     if success >= 0:
         return success, result['result']
     return success, result
@@ -90,7 +58,7 @@ def delete_datastore_resource(resource_id: str) -> (int, dict):
 
 def check_resources(resource_ids: list) -> (int, list):
     for resource_id in resource_ids:
-        success, result = ckan_api_request("resource_show", "get", API_TOKEN, params={"id": resource_id})
+        success, result = commons.ckan_api_request("resource_show", "get", params={"id": resource_id})
         if success < 0:
             if result["code"] == 404:
                 print("ERROR: NOT FOUND \t" + resource_id)
@@ -127,13 +95,17 @@ def reload_resources(resources, force=False):
                 for r in datasets[dataset_id]:
                     resource_id = r["id"]
                     # check errors
-                    success, result = ckan_api_request("xloader_status", "get", API_TOKEN,
-                                                       params={"id": resource_id})
+                    success, result = commons.ckan_api_request("xloader_status", "get", params={"id": resource_id})
                     if success >= 0:
                         if result['result']['status'] == "error":
-                            error_message = result['result']['task_info']['error']['message']
-                            print("\t - Xloader ERROR:", resource_id, error_message)
-                            error_log.write("\n * {} {}/dataset/{}/resource/{}\n".format(i, CKAN_URL, dataset_id,resource_id))
+                            error_message = result['result']['error']
+                            if result['result']['task_info']:
+                                if result['result']['task_info']['error']:
+                                    error_message = result['result']['task_info']['error']['message']
+                            print("\t - Xloader ERROR:", resource_id, error_message,
+                                  "{}/dataset/{}/resource/{}\n".format(CKAN_URL, dataset_id, resource_id))
+                            error_log.write("\n * {} {}/dataset/{}/resource/{}\n".format(i, CKAN_URL, dataset_id,
+                                                                                         resource_id))
                             error_log.write("{}{}\n".format(resource_id, error_message))
                             # retry on network error
                             if error_message.find("HTTPSConnectionPool") >= 0 \
@@ -167,17 +139,17 @@ def main() -> int:
     # delete removed resources
     check_resources(resource_ids)
 
-    # # check all CSV resources are in the datastore
-    # csv_resources_missing = get_csv_resources_list()
-    # print("Found {} resources missing in datastore: {}...".format(len(csv_resources_missing),
-    #                                                 [(r['id'], r['package_id']) for r in csv_resources_missing[0:10]]))
-    # missing_matches = [(r['id'], r['package_id']) for r in csv_resources_missing if r['id'] in resource_ids]
-    # print(len(missing_matches), missing_matches[0:10])
-    #
-    # dataset_list = list(set([r['package_id'] for r in csv_resources_missing]))
-    # print(" - Missing resources result in {} datasets".format(len(dataset_list)))
-    #
-    # reload_resources(csv_resources_missing)
+    # check all CSV resources are in the datastore
+    csv_resources_missing = get_csv_resources_list()
+    print("Found {} resources missing in datastore: {}...".format(len(csv_resources_missing),
+                                                    [(r['id'], r['package_id']) for r in csv_resources_missing[0:10]]))
+    missing_matches = [(r['id'], r['package_id']) for r in csv_resources_missing if r['id'] in resource_ids]
+    print(len(missing_matches), missing_matches[0:10])
+
+    dataset_list = list(set([r['package_id'] for r in csv_resources_missing]))
+    print(" - Missing resources result in {} datasets".format(len(dataset_list)))
+
+    reload_resources(csv_resources_missing)
     return 0
 
 
