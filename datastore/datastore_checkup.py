@@ -60,7 +60,7 @@ def check_resources(resource_ids: list) -> (int, list):
     for resource_id in resource_ids:
         success, result = commons.ckan_api_request("resource_show", "get", params={"id": resource_id})
         if success < 0:
-            if result["code"] == 404:
+            if result["error"]["error"]["__type"] == 'Not Found Error':
                 print("ERROR: NOT FOUND \t" + resource_id)
                 print(result["http_error"].errno)
                 success, result = delete_datastore_resource(resource_id)
@@ -149,7 +149,8 @@ def main() -> int:
     dataset_list = list(set([r['package_id'] for r in csv_resources_missing]))
     print(" - Missing resources result in {} datasets".format(len(dataset_list)))
 
-    reload_resources(csv_resources_missing)
+    # Reload the resources
+    # reload_resources(csv_resources_missing)
     return 0
 
 

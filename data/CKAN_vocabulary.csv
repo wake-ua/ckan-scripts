@@ -1,35 +1,65 @@
 tag_vocabulary_es,tag_vocabulary_ca,tag_vocabulary_en
-Agencias de viaje,Agèncias de viatges,Travel agencys
+Actividades,Activitats,Activities
+Agencias de Viaje,Agèncias de Viatges,Travel Agencys
 Albergues,Refugi,Shelters
-Alojamiento Rural,Allotjament rural,Rural accommodation
-Alquiler de coches,Lloguer de cotxes,Car rental
-Aparcamientos,Estacionaments,Parking lots
+Alojamiento Rural,Allotjament Rural,Rural Accommodation
+Alquiler de Coches,Lloguer de Cotxes,Car Rental
+Aparcamientos,Estacionaments,Parking Lots
 Autobuses,Autobusos,Buses
-Bici,Bici,Bike
-Bien de Interés Cultural,Interès cultural bo,Cultural Interest Good
+Barrios,Barris,Neighborhoods
+Bicis,Bicis,Bikes
+Bien de Interés Cultural,Interès Cultural Bo,Cultural Interest Goods
 Camping,Campament,Camping
-Empleo turístico,Ocupació turística,Tourist employment
-Empleo turístico según la Encuesta de Población Activa,L’ocupació turística segons l’enquesta de població activa,Tourist employment according to the Active Population Survey
-Empresas de turismo activo,Empreses turístiques actives,Active tourism companies
-Encuestas de ocupación,Enquestes d’ocupació,Occupation surveys
+Carreteras,Carreteres,Roads
+Coeficiente de Variacion,Coeficient de Variació,Variation Coefficient
+Empleo Turistico,Ocupació Turística,Tourist Employment
+Empleo Turistico segun la Encuesta de Población Activa,Ocupació Turística segons l’enquesta de Població Activa,Tourist Employment According to the Active Population Survey
+Empresas,Empreses,Business
+Empresas de Turismo Activo,Empreses Turístiques Actives,Active Tourism Companies
+Encuestas de Ocupacion,Enquestes D’ocupació,Occupation Surveys
+Equipamientos Privados,Equipaments Privats,Private Facilities
+Equipamientos Publicos,Equipaments Públics,Public Facilities
 Estaciones,Estacions,Stations
-Estadística de Empleo Turístico según la Afiliación a la Seguridad Social,Estadístiques d’ocupació turística segons l’afiliació a la Seguretat Social,Tourist Employment Statistics according to social security affiliation
-Gustos y habitos,Gustos i hàbits,Tastes and habits
+Estadistica de Empleo Turistico segun la Afiliación a la Seguridad Social,Estadístiques D’ocupació Turística segons l’afiliació a la Seguretat Social,Tourist Employment Statistics According to Social Security Affiliation
+Estancia Media,Estada Mitjana,Average Stay
+Eventos,Esdeveniments,Events
+Excursiones,Excursions,Excursions
+Gasto,Despesa,Spent
+Gustos y Habitos,Gustos i Hàbits,Tastes and Habits
 Hostales,Hostals,Hostels
 Hoteles,Hotels,Hotels
-Indicadores de Rentabilidad del Sector Hotelero,Indicadors de rendibilitat del sector hoteler,Profitability indicators of the hotel sector
+Indicadores de Rentabilidad del Sector Hotelero,Indicadors de Rendibilitat del Sector Hoteler,Profitability Indicators of the Hotel Sector
+Ingreso por Habitacion,Ingrés Per Habitació,Income Per Room
 Medioambiente,Entorn,Environment
+Mercados,Mercats,Markets
 Monumentos,Monuments,Monuments
-Movilidad Reducida,Mobilitat reduïda,Reduced mobility
+Movilidad Reducida,Mobilitat Reduïda,Reduced Mobility
+Municipios,Municipis,Municipalities
 Museos,Museus,Museums
-Ocio y Cultura,O oci i cultura,Leisure and culture
+Ocio y Cultura,O Oci i Cultura,Leisure and Culture
 Otros,Altres,Other
+Parques,Parcs,Parks
 Pensiones,Pensions,Pensions
-Perfiles demograficos,Perfils demogràfics,Demographic profiles
+Perfiles Demograficos,Perfils Demogràfics,Demographic Profiles
 Perfiles Turisticos,Perfils Turístics,Tourist Profiles
+Pernoctaciones,Pernoctacions,Overnight Stays
+Playas,Platges,Beaches
+Precios,Preus,Prices
+Puntos Wifi,Punts Wifi,Wifi Points
+Recarga Electrica,Recàrrega Elèctrica,Electric Recharge
+Recursos Culturales,Recursos Culturals,Cultural Resources
+Recursos Naturales,Recursos Naturals,Natural Resources
+Residentes,Residents,Residents
 Restaurantes,Restaurants,Restaurants
 Rutas,Rutes,Routes
-Satisfación en el destino,Satisfacció a la destinació,Satisfaction in the destination
-Tráfico,Trànsit,Traffic
-Viajeros y Pernoctaciones,Viatjants i Pernoctacions,Travelers and Pernoctations
-Viviendas turísticas,Habitatge turístic,Tourist housing
+Salud,Salut,Health
+Satisfacion en el Destino,Satisfacció a la Destinació,Satisfaction in the Destination
+Tarifa Media Diaria,Tariafa Mitjana Diària,Average Daily Rate
+Tasa de Variacion,Taxa de Varaició,Rate of Change
+Taxi,Taxi,Cab
+Territorio,Territori,Territory
+Trafico,Trànsit,Traffic
+Turistas,Turistes,Tourists
+Viajeros y Pernoctaciones,Viatgers i Pernoctacions,Travelers and Overnight Stays
+Viajes,Viatges,Trips
+Viviendas Turisticas,Habitatges Turistics,Tourist Housing

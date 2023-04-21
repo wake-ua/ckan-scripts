@@ -1,7 +1,14 @@
-
+#!/usr/bin/env python   §§§
 import os
 import sys
 from common_importer import import_datasets
+
+# parameters from ENV
+from dotenv import load_dotenv
+
+load_dotenv('../.env')
+
+DATASETS_PATH = os.getenv('DATASETS_PATH')
 
 # global variables and default values
 ORG_DIR = {
@@ -20,8 +27,6 @@ ORG_DIR = {
     "servicios.ine.es": "ine"
 }
 
-BASE_DIR = "./data"
-
 
 def main() -> int:
 
@@ -33,7 +38,7 @@ def main() -> int:
         if len(sys.argv) > 2:
             selected_package = sys.argv[2]
     else:
-        input_dirs = [os.path.join(BASE_DIR, subdir) for subdir in ORG_DIR.keys()]
+        input_dirs = [os.path.join(DATASETS_PATH, subdir) for subdir in ORG_DIR.keys()]
 
     for input_dir in input_dirs:
         org = ORG_DIR[input_dir.rsplit('/', 1)[-1]]
@@ -44,7 +49,6 @@ def main() -> int:
 
 if __name__ == '__main__':
     sys.exit(main())
-
 
 
 # def add_datasets(tags: list) -> (int, dict):

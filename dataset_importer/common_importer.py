@@ -1,27 +1,78 @@
 #!/usr/bin/env python
-import requests
-from requests.exceptions import HTTPError
 import json
-import pprint
-import io
-import shutil
 import os
-import sys
-import datetime
+import csv
+
+from unidecode import unidecode
 
 import dataset_importer_ckan
+from scripts.commons import commons
 
 # parameters from ENV
 from dotenv import load_dotenv
 load_dotenv('../.env')
 
-API_TOKEN = os.getenv('API_TOKEN')
 CKAN_URL = os.getenv('CKAN_URL')
 ORGANIZATIONS_FILE_PATH = os.getenv('ORGANIZATION_LIST_PATH')
+DATASET_LIST_PATH = os.getenv('DATASET_LIST_PATH')
+VOCABULARY_LIST_PATH = os.getenv('VOCABULARY_LIST_PATH')
+TAG_LIST_PATH = os.getenv('TAG_LIST_PATH')
 
 # parameters
-CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
 LANGS = ['es', 'ca', 'en']
+
+
+def read_dataset_list(file_path: str) -> dict:
+    # read the groups file
+    print(" - Read input file: {}".format(file_path))
+
+    datasets = {}
+
+    with open(file_path) as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+
+        for row in reader:
+            datasets[row['id']] = row
+
+    return datasets
+
+
+def read_vocabulary(file_path: str) -> dict:
+    # read the tags file
+    print(" - Read input file: {}".format(file_path))
+
+    tags = {}
+
+    with open(file_path) as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+
+        for row in reader:
+            key = unidecode(row["tag_vocabulary_es"].strip().lower())
+            tags[key] = [row["tag_vocabulary_" + lang] + '-' + lang for lang in LANGS
+                         if len(row["tag_vocabulary_" + lang].strip()) > 0]
+
+    print(" \t => Read {} tags(s): {}".format(len(tags), tags.items()))
+
+    return tags
+
+
+def read_tags(file_path: str) -> dict:
+    # read the tags file
+    print(" - Read input file: {}".format(file_path))
+
+    tags = {}
+
+    with open(file_path) as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+
+        for row in reader:
+            key = unidecode(row["tag_es"].strip().lower())
+            tags[key] = [unidecode(row["tag_" + lang]).strip().lower() + '-' + lang for lang in LANGS
+                         if len(row["tag_" + lang].strip()) > 0]
+
+    print(" \t => Read {} free tags(s): {}".format(len(tags), tags.items()))
+
+    return tags
 
 
 def get_datasets_list(file_dir: str) -> list:
@@ -99,39 +150,6 @@ def get_translated_field(field: str, dataset: dict, default_value: str, org_name
                 new_field[lang] = some_value
 
     return new_field
-
-
-def ckan_api_request(endpoint: str, method: str, token: str, data: dict = {},
-                     params: dict = {}, files: list = [],
-                     content: str = 'application/json', verbose=True) -> (int, dict):
-    # set headers
-    headers = {'Authorization': token}
-    if content:
-        headers['Content-Type'] = content
-
-    # do the actual call
-    try:
-        if method == 'post':
-            response = requests.post('{}{}'.format(CKAN_API_URL, endpoint), json=data, params=params,
-                                     files=files, headers=headers)
-        else:
-            response = requests.get('{}{}'.format(CKAN_API_URL, endpoint), params=params, headers=headers)
-
-        # If the response was successful, no Exception will be raised
-        response.raise_for_status()
-        result = response.json()
-        return 0, result
-
-    except HTTPError as http_err:
-        if verbose:
-            print(f'\t HTTP error occurred: {http_err} {response.json()}')  # Python 3.6
-        result = {"http_error": http_err, "error": response.json()}
-    except Exception as err:
-        if verbose:
-            print(f'\t Other error occurred: {err}')  # Python 3.6
-        result = {"error": err}
-
-    return -1, result
 
 
 def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
@@ -232,7 +250,7 @@ def get_ckan_dataset(path: str, dataset: dict, organization: dict) -> dict:
 
     # specific additions for CKAN dataset
     if organization["type"] == "CKAN":
-        print(" > Complete metadata with specific CKAN info")
+        print("\t - Complete metadata with specific CKAN info")
         ckan_dataset = dataset_importer_ckan.complete_ckan_dataset(path, organization, ckan_dataset)
 
     # prefix title with org name
@@ -246,20 +264,23 @@ def import_dataset(ckan_dataset: dict, update: bool = False) -> (int, dict):
 
     # call the endpoint
     if not update:
-        success, result = ckan_api_request(endpoint="package_create", method="post", token=API_TOKEN,
-                                           data=ckan_dataset)
+        success, result = commons.ckan_api_request(endpoint="package_create", method="post", data=ckan_dataset)
     else:
         ckan_dataset["id"] = ckan_dataset["name"]
-        success, result = ckan_api_request(endpoint="package_patch", method="post",
-                                           token=API_TOKEN, data=ckan_dataset)
+        success, result = commons.ckan_api_request(endpoint="package_patch", method="post", data=ckan_dataset)
     return success, result
+
+
+def delete_dataset(dataset: dict) -> (int, dict):
+
+    return commons.ckan_api_request('package_delete', 'post', {'id': dataset["name"]})
 
 
 def get_resource_ids(dataset: dict) -> dict:
     resource_ids = {}
 
-    success, result = ckan_api_request(endpoint="package_show", method="get",
-                                               token=API_TOKEN, params={"id": dataset["name"]}, verbose=False)
+    success, result = commons.ckan_api_request(endpoint="package_show", method="get",
+                                               params={"id": dataset["name"]}, verbose=False)
     if success >= 0:
         ckan_dataset = result["result"]
         for resource in ckan_dataset.get("resources", []):
@@ -268,11 +289,49 @@ def get_resource_ids(dataset: dict) -> dict:
     return resource_ids
 
 
-def dataset_has_resource_ids(ckan_dataset):
+def dataset_has_resource_ids(ckan_dataset: dict) -> bool:
     for resource in ckan_dataset["resources"]:
         if resource.get('id'):
             return True
     return False
+
+
+# groups,groups_extra,vocabulary,vocabulary_extra,tags
+def add_semantics(dataset: dict, dataset_data: dict, vocabulary_data: dict, tags_data: dict) -> dict:
+    # add groups
+    group_ids = [group.lower().strip() for group in (dataset_data['groups'] + ','
+                                                     + dataset_data['groups_extra']).split(',') if len(group) > 1]
+    if group_ids:
+        print("\t\t - Adding groups to dataset {}: {}".format(dataset['name'], ", ".join(group_ids)))
+        dataset["groups"] = [{"name": group} for group in set(group_ids) if len(group) > 1]
+
+    # add vocabulary
+    vocabulary_tags = [unidecode(tag.lower().strip()) for tag in (dataset_data['vocabulary'] + ','
+                                                                  + dataset_data['vocabulary_extra']).split(',')
+                       if len(tag) > 1]
+    if vocabulary_tags:
+        print("\t\t - Adding vocabulary tags to dataset {}: {}".format(dataset['name'], ", ".join(vocabulary_tags)))
+        vocabulary_tag_list = []
+        for tag in vocabulary_tags:
+            vocabulary_tag_list += vocabulary_data[tag]
+        dataset['tag_string_schemaorg'] = ','.join(vocabulary_tag_list)
+
+    # add free tags
+    tags = [unidecode(tag.lower().strip()) for tag in (dataset_data['tags']).split(',') if len(tag) > 1]
+    if tags:
+        print("\t\t - Adding free tags to dataset {}: {}".format(dataset['name'], ", ".join(tags)))
+        free_tag_list = []
+        for tag in tags:
+            new_tags = tags_data.get(tag)
+            if new_tags:
+                free_tag_list += new_tags
+            else:
+                free_tag_list += [tag + '-es']
+                print("*ERROR* MISSING TAG: {}".format(tag))
+                tags_data = read_tags(TAG_LIST_PATH)
+        dataset['tag_string'] = ','.join(free_tag_list)
+
+    return dataset
 
 
 def import_datasets(input_dir: str, organization_name: str, selected_package: str = None) -> (int, dict):
@@ -285,9 +344,18 @@ def import_datasets(input_dir: str, organization_name: str, selected_package: st
     organization = read_organization(organization_name)
     print(" * Got organization {} ({}) data".format(organization["title"]["en"], organization['name']))
 
+    # get the dataset data
+    dataset_master = read_dataset_list(DATASET_LIST_PATH)
+    print(" * Got dataset master list {}:\n\t - Read {} datasets".format(DATASET_LIST_PATH, len(dataset_master)))
+
+    # get tags and vocabulary
+    vocabulary = read_vocabulary(VOCABULARY_LIST_PATH)
+    tags = read_tags(TAG_LIST_PATH)
+
     # process the datasets
     created_datasets = []
     updated_datasets = []
+    deleted_datasets = []
 
     # read the input file
     dataset_files = get_datasets_list(input_dir)
@@ -295,32 +363,44 @@ def import_datasets(input_dir: str, organization_name: str, selected_package: st
 
     # save the organizations
     for dataset_file in dataset_files:
-        print("* Reading dataset {}".format(dataset_file))
         dataset = read_dataset(dataset_file)
 
         if selected_package and dataset["id_portal"] != selected_package:
             continue
 
-        print("\n * Importing DATA: {} {}".format(dataset["id_portal"], dataset["id_custom"]))
+        print("\n* Reading dataset {}".format(dataset_file))
+        print("\t - Data: {} {}".format(dataset["id_portal"], dataset["id_custom"]))
         ckan_dataset = get_ckan_dataset(dataset_file, dataset, organization)
 
-        update = dataset_has_resource_ids(ckan_dataset)
+        existing = dataset_has_resource_ids(ckan_dataset)
 
-        success, result = import_dataset(ckan_dataset, update=update)
+        if dataset_master[ckan_dataset['name']]['ok'] == '0':
+            if existing:
+                success, result = delete_dataset(ckan_dataset)
+            else:
+                print("\t => Skipping import: {} {}".format(organization, ckan_dataset['name']))
+                continue
+        else:
+            ckan_dataset = add_semantics(ckan_dataset, dataset_master[ckan_dataset['name']], vocabulary, tags)
+            success, result = import_dataset(ckan_dataset, update=existing)
 
         if success >= 0:
-            if update:
-                print("\t * Updated: {}...".format(str(result)[:500]))
-                updated_datasets += [result["result"]["name"]]
+            if existing:
+                if dataset_master[ckan_dataset['name']]['ok'] == '0':
+                    print("\t * Deleted: {}...".format(str(result)[:500]))
+                    deleted_datasets += [ckan_dataset['name']]
+                else:
+                    print("\t * Updated: {}...".format(str(result)[:500]))
+                    updated_datasets += [result["result"]["name"]]
             else:
                 print("\t * Created: {}...".format(str(result)[:500]))
                 created_datasets += [result["result"]["name"]]
         else:
-            print("\t => * Import Failed * update?", update)
+            print("\t => * Import Failed * existing?", existing)
             return -1
 
-
-    print(" \t - Created {} datasets: {} "
-          "\n\t - Updated {} datasets: {}".format(len(created_datasets), ', '.join([CKAN_URL + "/dataset/" + dataset for dataset in created_datasets]),
-                                                  len(updated_datasets), ', '.join([CKAN_URL + "/dataset/" + dataset for dataset in updated_datasets])))
+    print(" \t - Created {} datasets: {} \n\t - Updated {} datasets: {}  \n\t - Deleted {} datasets: {}".format(
+        len(created_datasets), ', '.join([CKAN_URL + "/dataset/" + dataset for dataset in created_datasets]),
+        len(updated_datasets), ', '.join([CKAN_URL + "/dataset/" + dataset for dataset in updated_datasets]),
+        len(deleted_datasets), ', '.join([CKAN_URL + "/dataset/" + dataset for dataset in deleted_datasets])))
     return 0, {}
