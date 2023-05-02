@@ -9,6 +9,8 @@ TAG_LIST_PATH=${DATA_PATH}/CKAN_tags.csv
 DATASET_LIST_PATH=${DATA_PATH}/CKAN_datasets.csv
 COLUMN_LIST_PATH=${DATA_PATH}/CKAN_column_labels.csv
 IMAGES_PATH=${DATA_PATH}/images
+DATASETS_PATH = ${DATA_PATH}/datasets
+
 
 # CKAN data paths
 GROUP_IMAGE_UPLOADS_PATH=<path>
