@@ -5,7 +5,7 @@ cadena,Nombre de la cadena hotelera a la que pertenece el establecimiento,text,c
 categoria,Sistema de clasificación utilizado para indicar a los usuarios la calidad de un establecimiento alojativo. A través de el Nº de estrellas ,text,"cod. categoria, categoria"
 cod_cadena,Código de la cadena hotelera a la que pertenece el establecimiento,text,cod. cadena
 cod_estado,Código de estado,text,cod.estado
-cod_municipio,Código del municipio,text,"cod. municipio, muni_codigo, codmun"
+cod_municipio,Código del municipio,text,"cod. municipio, muni_codigo, codmun, cod_mun"
 cod_provincia,Código de la provincia,text,"cod. provincia, prov_codigo"
 cod_tipo_via,Código de tipo de vía,text,cod. tipo via
 codigo_postal,Código postal,text,"codigo_postal, cp, c_p, c. postal, c.p."
