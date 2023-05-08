@@ -132,3 +132,5 @@ dmypy.json
 /data/datasets/*
 /dataset_importer/data/
 /datastore/output/
+/io/tmp/*
+/io/credentials/*
