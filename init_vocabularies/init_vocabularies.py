@@ -15,44 +15,13 @@ FILE_PATH = os.getenv('VOCABULARY_LIST_PATH')
 
 # parameters
 VOCABULARY_NAME = "schemaorg"
-LANGS = ["es", "ca", "en"]
-
-
-def read_tags(file_path: str) -> list:
-    # read the tags file
-    print(" - Read input file: {}".format(file_path))
-
-    tags = []
-
-    with open(FILE_PATH) as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
-
-        for row in reader:
-            new_row = {}
-
-            for field, value in row.items():
-                if field.rsplit('_', 1)[-1] in LANGS:
-                    parent_field = field.rsplit('_', 1)[0].strip()
-                    lang = field.rsplit('_', 1)[-1]
-                    translated_field = new_row.get(parent_field, {})
-                    translated_field[lang] = value
-                    new_row[parent_field] = translated_field
-                else:
-                    new_row[field] = value
-
-            tags += [new_row]
-            print("\t * {}".format(new_row))
-
-    print(" \t => Read {} tags(s): {}".format(len(tags), ', '.join([tag['tag_vocabulary']["es"] for tag in tags])))
-
-    return tags
 
 
 def edit_vocabulary(name: str, tags: list, update: bool = False) -> (int, dict):
     # map attributes to ckan tag
     ckan_vocabulary = {
         "name": name,
-        "tags": [{"name": tag["tag_vocabulary"][lang].strip().replace("'", " ").replace("’", " ") + "-" + lang} for tag in tags for lang in LANGS]
+        "tags": [{"name": tag["tag_vocabulary"][lang].strip().replace("'", " ").replace("’", " ") + "-" + lang} for tag in tags for lang in commons.LANGS]
     }
 
     # call the endpoint
@@ -67,7 +36,8 @@ def edit_vocabulary(name: str, tags: list, update: bool = False) -> (int, dict):
 def main() -> int:
 
     # read the input file
-    tags = read_tags(FILE_PATH)
+    tags = commons.read_vocabulary(FILE_PATH)
+    print(" \t -> Read {} vocabulary items: {}".format(len(tags), ', '.join([tag['tag_vocabulary']["es"] for tag in tags])))
 
     # create the vocabulary
     print("\n * Creating vocabulary: {}".format(VOCABULARY_NAME))

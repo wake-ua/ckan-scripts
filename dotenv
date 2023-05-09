@@ -1,3 +1,6 @@
+# Google Drive
+MASTER_FILE_ID=<id_for_TDATA_sheet>
+VALIDATION_REPORT_PATH=<output_validation_file>
 
 # init orgs and groups input data
 DATA_PATH = <input_path>

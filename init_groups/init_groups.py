@@ -20,24 +20,6 @@ CKAN_API_URL = "{}/api/3/action/".format(CKAN_URL)
 CKAN_UPLOADS_URL = "{}/uploads/group/".format(CKAN_URL)
 
 
-def read_groups(file_path: str) -> list:
-    # read the groups file
-    print(" - Read input file: {}".format(file_path))
-
-    groups = []
-
-    with open(FILE_PATH) as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
-
-        for row in reader:
-            groups += [row]
-            print("\t * {}".format(row))
-
-    print(" \t => Read {} groups(s): {}".format(len(groups), ', '.join([group['name'] for group in groups])))
-
-    return groups
-
-
 def edit_group(group: dict, update: bool = False) -> (int, dict):
     # map attributes to ckan group
     group_image_name = "logo_{}.png".format(group["name"])
@@ -66,7 +48,7 @@ def main() -> int:
     updated_groups = []
 
     # read the input file
-    groups = read_groups(FILE_PATH)
+    groups = commons.read_groups(FILE_PATH)
 
     # save the groups
     for group in groups:

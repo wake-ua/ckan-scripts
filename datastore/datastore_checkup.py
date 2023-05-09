@@ -75,6 +75,7 @@ def check_resources(resource_ids: list) -> (int, list):
             success, result = delete_datastore_resource(resource_id)
             print(" => DELETED resource: " + resource_id, success, result)
             # raise Exception("ERROR: Found bad format resource", resource_id)
+            continue
         if not result['result']['url'].lower().find('csv') > 0 and not result['result']['url'].find('txt') > 0:
             print('* MAYBE Bad format:', result['result']['format'], resource_id, result['result']['url'])
     return
