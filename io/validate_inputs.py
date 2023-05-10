@@ -74,7 +74,7 @@ def export_to_csv(file_path: str):
 
         ws_output_file = './tmp/' + ws_name + '.csv'
         with open(ws_output_file, 'w') as f:
-            w = csv.DictWriter(f, fieldnames=header)
+            w = csv.DictWriter(f, fieldnames=header, lineterminator="\n")
             w.writeheader()
             for row_data in row_dicts:
                 w.writerow(row_data)
@@ -236,7 +236,7 @@ if __name__ == '__main__':
         output_file = sys.argv[1]
     else:
         output_file = connect_to_google_drive(MASTER_FILE_ID)
-        output_file = "./tmp/output.xlsx"
+        # output_file = "./tmp/output.xlsx"
     export_to_csv(output_file)
     issues = validate(VALIDATION_REPORT_PATH)
     print(" DONE, issues = {}".format(issues))

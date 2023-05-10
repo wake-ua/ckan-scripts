@@ -374,7 +374,12 @@ def import_datasets(input_dir: str, organization_name: str, selected_package: st
 
         existing = dataset_has_resource_ids(ckan_dataset)
 
-        if dataset_master[ckan_dataset['name']]['ok'] == '0':
+        dataset_ok = False
+        if len(dataset_master[ckan_dataset['name']]['ok'].strip()) > 0:
+            if int(float(dataset_master[ckan_dataset['name']]['ok'])) == 1:
+                dataset_ok = True
+
+        if not dataset_ok:
             if existing:
                 success, result = delete_dataset(ckan_dataset)
             else:
@@ -386,7 +391,7 @@ def import_datasets(input_dir: str, organization_name: str, selected_package: st
 
         if success >= 0:
             if existing:
-                if dataset_master[ckan_dataset['name']]['ok'] == '0':
+                if not dataset_ok:
                     print("\t * Deleted: {}...".format(str(result)[:500]))
                     deleted_datasets += [ckan_dataset['name']]
                 else:
