@@ -134,3 +134,4 @@ dmypy.json
 /datastore/output/
 /io/tmp/*
 /io/credentials/*
+.DS_Store

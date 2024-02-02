@@ -13,7 +13,7 @@ DATASET_LIST_PATH=${DATA_PATH}/CKAN_datasets.csv
 COLUMN_LIST_PATH=${DATA_PATH}/CKAN_column_labels.csv
 IMAGES_PATH=${DATA_PATH}/images
 DATASETS_PATH = ${DATA_PATH}/datasets
-
+ONTOLOGY_LIST_PATH=${DATA_PATH}/CKAN_ontology.csv
 
 # CKAN data paths
 GROUP_IMAGE_UPLOADS_PATH=<path>
@@ -21,3 +21,4 @@ GROUP_IMAGE_UPLOADS_PATH=<path>
 # API Access
 API_TOKEN=<token>
 CKAN_URL=<url>
+CKAN_CONFIG=<path to ckan.ini>

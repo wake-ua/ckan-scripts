@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import csv
+import json
 import os
 import sys
 import requests
@@ -15,6 +16,7 @@ load_dotenv('../.env')
 API_TOKEN = os.getenv('API_TOKEN')
 CKAN_URL = os.getenv('CKAN_URL')
 FILE_PATH = os.getenv('COLUMN_LIST_PATH')
+ONTOLOGY_PATH = os.getenv('ONTOLOGY_LIST_PATH')
 
 # parameters
 DO_OUTPUT_LIST = True
@@ -28,7 +30,7 @@ def read_labels(file_path: str) -> dict:
     column_label_dict = {}
     labels = []
 
-    with open(FILE_PATH) as csvfile:
+    with open(file_path) as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
 
         for row in reader:
@@ -42,6 +44,29 @@ def read_labels(file_path: str) -> dict:
     print(" \t => Read {} labels(s): {}".format(len(labels), ', '.join(labels)))
 
     return column_label_dict
+
+
+def read_ontology(file_path: str) -> dict:
+    # organization, package_id, resource_id, column, ontology, predicate, function, comments
+    # read the tags file
+    print(" - Read ontology input file: {}".format(file_path))
+
+    ontology_dict = {}
+
+    with open(file_path) as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+
+        for row in reader:
+            key = (row['organization'], row['package_id'], row['resource_id'])
+            ontology = ontology_dict.get(key, {})
+            ontology_column = ontology.get(row['column'], [])
+            ontology_column += [{k: row[k] for k in ['ontology', 'predicate', 'function']}]
+            ontology[row['column']] = ontology_column
+            ontology_dict[key] = ontology
+
+    print(" \t => Read {} ontology entries".format(len(ontology_dict)))
+
+    return ontology_dict
 
 
 def get_resources_list() -> (int, list):
@@ -59,7 +84,7 @@ def check_resource(resource_id: str) -> (int, list):
             print(result["http_error"].errno)
             raise Exception("ERROR: Found deleted resource", resource_id)
         else:
-            raise Exception("ERROR: Uknown error check resource", resource_id, success, result)
+            raise Exception("ERROR: Unknown error check resource", resource_id, success, result)
 
     return success, result
 
@@ -115,7 +140,7 @@ def get_datastore_info(resource_ids: list, raw: bool = False) -> list:
     return datastore_info
 
 
-def set_column_labels(resource_ids: list, labels_dict: dict) -> int:
+def set_column_labels(resource_ids: list, labels_dict: dict, ontology_dict: dict) -> int:
     count = 0
     for resource_id in resource_ids:
         datastore_info = get_datastore_info([resource_id], raw=True)[0]
@@ -124,10 +149,16 @@ def set_column_labels(resource_ids: list, labels_dict: dict) -> int:
         form_data = {}
         update = False
 
+        organization = datastore_info['package_data']['organization']['name']
+        package_id = datastore_info['package_data']['name']
+        key_ontology = (organization, package_id, resource_id)
+        ontology_info = ontology_dict.get(key_ontology, {})
+
         for field in fields:
             form_data["info__{}__type_override".format(index)] = field.get('info',{}).get('type_override', "")
             form_data["info__{}__label".format(index)] = field.get('info', {}).get('label', "")
             form_data["info__{}__notes".format(index)] = field.get('info', {}).get('notes', "")
+            form_data["info__{}__ontology".format(index)] = field.get('info', {}).get('ontology', "")
 
             base_id = unidecode(field['id'].strip().lower())
             base_id_alt = base_id.replace(' ', '_')
@@ -141,6 +172,13 @@ def set_column_labels(resource_ids: list, labels_dict: dict) -> int:
                 form_data["info__{}__label".format(index)] = ref_info['label']
                 form_data["info__{}__notes".format(index)] = ref_info['description']
                 update = True
+
+            if ontology_info.get(field['id']):
+                ontology_list = ontology_info.get(field['id'])
+                print('\t - Match Ontology: {} => {} '.format(field['id'],
+                      ', '.join([o['predicate'] for o in ontology_list])))
+                form_data["info__{}__ontology".format(index)] = json.dumps(ontology_list)
+
             index += 1
 
         if update:
@@ -148,30 +186,32 @@ def set_column_labels(resource_ids: list, labels_dict: dict) -> int:
             # set headers
             headers = {'Authorization': API_TOKEN}
 
-            result = {}
-
             # do the actual call
+            response = {}
             try:
                 response = requests.post('{}/dataset/{}/dictionary/{}'.format(CKAN_URL,
-                                                                datastore_info['package_data']['name'],
-                                                                resource_id
-                                                                ), data=form_data,headers=headers)
+                                         datastore_info['package_data']['name'],
+                                         resource_id), data=form_data,headers=headers)
 
                 # If the response was successful, no Exception will be raised
                 response.raise_for_status()
 
             except HTTPError as http_err:
-                print(f'\t HTTP error occurred: {http_err} {response.json().get("error")}')  # Python 3.6
-                result = {"code": response.status_code, "http_error": http_err, "error": response.json().get("error")}
+                if response:
+                    print(f'\t HTTP error occurred: {http_err} {response.json().get("error")}')  # Python 3.6
+                else:
+                    print(f'\t HTTP error occurred: {http_err}, no response')  # Python 3.6
+                raise http_err
             except Exception as err:
                 print(f'\t Other error occurred: {err}')  # Python 3.6
-                result = {"error": err}
+                raise err
 
     return count
 
 
 def main() -> int:
     labels_dict = read_labels(FILE_PATH)
+    ontology_dict = read_ontology(ONTOLOGY_PATH)
 
     if len(sys.argv) > 1:
         resource_ids = [sys.argv[1]]
@@ -181,7 +221,7 @@ def main() -> int:
         resource_ids = result
 
     # add labels
-    matches = set_column_labels(resource_ids, labels_dict)
+    matches = set_column_labels(resource_ids, labels_dict, ontology_dict)
     print(" * DONE: {} resources updated".format(matches))
 
     if DO_OUTPUT_LIST:
