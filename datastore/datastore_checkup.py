@@ -29,7 +29,7 @@ def get_csv_resources_list() -> (int, list):
     params = {"q": "res_format:CSV", "rows": step}
     success, result = commons.ckan_api_request("package_search", "get", params=params)
     if success < 0:
-        raise ("ERROR: Cannot retrieve datasets")
+        raise Exception("ERROR: Cannot retrieve datasets")
     total = result['result']['count']
     datasets = result['result']['results']
 
@@ -37,7 +37,7 @@ def get_csv_resources_list() -> (int, list):
         params = {"q": "res_format:CSV", "rows": step, "start": len(datasets)}
         success, result = commons.ckan_api_request("package_search", "get", params=params)
         if success < 0:
-            raise ("ERROR: Cannot retrieve datasets")
+            raise Exception("ERROR: Cannot retrieve datasets")
         datasets += result['result']['results']
 
     resources = []
@@ -124,7 +124,7 @@ def reload_resources(resources, force=False):
                 print("\t Submitting dataset {}/{}\n\t".format(i, len(datasets.keys())), command)
                 p = subprocess.run(command.split(' '))
                 print("DONE: {}/dataset/{}/resource/{}\n".format(CKAN_URL,dataset_id,
-                                                        [r["id"] for r in resources if r['package_id'] == dataset_id][0]))
+                      [r["id"] for r in resources if r['package_id'] == dataset_id][0]))
                 p1 = subprocess.run(['sleep', "5"])
 
             i += 1
