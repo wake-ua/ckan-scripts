@@ -57,7 +57,11 @@ def read_ontology(file_path: str) -> dict:
         reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
 
         for row in reader:
-            key = (row['organization'], row['package_id'], row['resource_id'])
+            resource_id = row['resource_url'].split('/resource/')[1]
+            if CKAN_URL == "http://127.0.0.1:5000":
+                resource_id = row['resource_id_local']
+            package_id = row['resource_url'].split('/dataset/')[1].split('/resource/')[0]
+            key = (row['organization'], package_id, resource_id)
             ontology = ontology_dict.get(key, {})
             ontology_column = ontology.get(row['column'], [])
             ontology_column += [{k: row[k] for k in ['ontology', 'predicate', 'function']}]
