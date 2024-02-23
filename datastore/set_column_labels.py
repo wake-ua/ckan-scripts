@@ -174,10 +174,14 @@ def set_column_labels(resource_ids: list, labels_dict: dict, ontology_dict: dict
                 update = True
 
             if ontology_info.get(field['id']):
+                if not update:
+                    print("\n {}/dataset/{}/resource/{} ".format(CKAN_URL, datastore_info['package_data']['name'],
+                                                                 resource_id))
                 ontology_list = ontology_info.get(field['id'])
                 print('\t - Match Ontology: {} => {} '.format(field['id'],
                       ', '.join([o['predicate'] for o in ontology_list])))
                 form_data["info__{}__ontology".format(index)] = json.dumps(ontology_list)
+                update = True
 
             index += 1
 
@@ -214,7 +218,10 @@ def main() -> int:
     ontology_dict = read_ontology(ONTOLOGY_PATH)
 
     if len(sys.argv) > 1:
-        resource_ids = [sys.argv[1]]
+        if len(sys.argv[1].split(',')) > 1:
+            resource_ids = sys.argv[1].split(',')
+        else:
+            resource_ids = [sys.argv[1]]
     else:
         # get_all_resources_ids_in_datastore
         success, result = get_resources_list()

@@ -1,47 +1,47 @@
-organization,package_id,resource_id,column,ontology,predicate,function,comments
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Signatura,segittur_rdf,turismo:Hotel,str_to_id,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Nombre,segittur_rdf,skos:prefLabel,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Nombre,segittur_rdf,turismo:name,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Provincia,segittur_rdf,turismo:province,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Municipio,segittur_rdf,turismo:city,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Comarca,segittur_rdf,turismo:county,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,CP,segittur_rdf,turismo:postalCode,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Direccion,segittur_rdf,turismo:streetAddress,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,b311e90a-3482-4fb8-b475-0986b6e9d42d,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Signatura,segittur_rdf,turismo:Hotel,str_to_id,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Nombre,segittur_rdf,skos:prefLabel,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Nombre,segittur_rdf,turismo:name,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Provincia,segittur_rdf,turismo:province,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Municipio,segittur_rdf,turismo:city,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Comarca,segittur_rdf,turismo:county,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,CP,segittur_rdf,turismo:postalCode,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Direccion,segittur_rdf,turismo:streetAddress,,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,
-gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,7c732df0-ac3a-4df1-8a11-732e6711c55d,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Signatura,segittur_rdf,turismo:Hotel,str_to_id,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Nombre,segittur_rdf,skos:prefLabel,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Nombre,segittur_rdf,turismo:name,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Modalidad,segittur_rdf,turismo:hotelSpecialty,match_hotel_speciality,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Provincia,segittur_rdf,turismo:province,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Municipio,segittur_rdf,turismo:city,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Comarca,segittur_rdf,turismo:county,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,CP,segittur_rdf,turismo:postalCode,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Direccion,segittur_rdf,turismo:streetAddress,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,1ea82cd9-3105-46db-95ee-690d5e139c8a,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Signatura,segittur_rdf,turismo:Hotel,str_to_id,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Nombre,segittur_rdf,skos:prefLabel,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Nombre,segittur_rdf,turismo:name,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Modalidad,segittur_rdf,turismo:hotelSpecialty,match_hotel_speciality,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Provincia,segittur_rdf,turismo:province,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Municipio,segittur_rdf,turismo:city,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Comarca,segittur_rdf,turismo:county,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,CP,segittur_rdf,turismo:postalCode,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Direccion,segittur_rdf,turismo:streetAddress,,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,
-gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,ded4a88e-bed7-4723-82ec-d151abe0ea0f,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,
+organization,package_id,resource_title,resource_id,column,ontology,predicate,function,comments,resource_id_local
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Signatura,segittur_rdf,turismo:Hotel,str_to_id,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Nombre,segittur_rdf,skos:prefLabel,,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Nombre,segittur_rdf,turismo:name,,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Provincia,segittur_rdf,turismo:province,,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Municipio,segittur_rdf,turismo:city,,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Comarca,segittur_rdf,turismo:county,,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,CP,segittur_rdf,turismo:postalCode,,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Direccion,segittur_rdf,turismo:streetAddress,,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles Último Período,d2df3cb6-29f8-4f8d-bc8c-2f07c5de5095,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,,b311e90a-3482-4fb8-b475-0986b6e9d42d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Signatura,segittur_rdf,turismo:Hotel,str_to_id,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Nombre,segittur_rdf,skos:prefLabel,,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Nombre,segittur_rdf,turismo:name,,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Provincia,segittur_rdf,turismo:province,,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Municipio,segittur_rdf,turismo:city,,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Comarca,segittur_rdf,turismo:county,,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,CP,segittur_rdf,turismo:postalCode,,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Direccion,segittur_rdf,turismo:streetAddress,,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,741260914897-gva-dades-turisme-hotels-comunitat-valenciana,Lista de Hoteles (Histórico),cba3a7ac-cbc3-4959-a309-547e0172ff87,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,,7c732df0-ac3a-4df1-8a11-732e6711c55d
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Signatura,segittur_rdf,turismo:Hotel,str_to_id,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Nombre,segittur_rdf,skos:prefLabel,,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Nombre,segittur_rdf,turismo:name,,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Modalidad,segittur_rdf,turismo:hotelSpecialty,match_hotel_speciality,hotel rural,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Provincia,segittur_rdf,turismo:province,,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Municipio,segittur_rdf,turismo:city,,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Comarca,segittur_rdf,turismo:county,,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,CP,segittur_rdf,turismo:postalCode,,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Direccion,segittur_rdf,turismo:streetAddress,,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Hoteles Último Período,7d9abe42-5369-41b3-be2e-f8080a3cf4d3,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,,1ea82cd9-3105-46db-95ee-690d5e139c8a
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Signatura,segittur_rdf,turismo:Hotel,str_to_id,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Cod. Categoria,segittur_rdf,turismo:stars,cast_to_int,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Nombre,segittur_rdf,skos:prefLabel,,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Nombre,segittur_rdf,turismo:name,,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Modalidad,segittur_rdf,turismo:hotelSpecialty,match_hotel_speciality,hotel rural,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Provincia,segittur_rdf,turismo:province,,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Municipio,segittur_rdf,turismo:city,,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Comarca,segittur_rdf,turismo:county,,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,CP,segittur_rdf,turismo:postalCode,,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Direccion,segittur_rdf,turismo:streetAddress,,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Habitaciones,segittur_rdf,turismo:numberOfRooms,cast_to_int,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
+gva,101822082238-gva-dades-turisme-allotjament-rural-comunitat-valenciana,Lista de Alojamientos Rurales (Histórico),82cd9cd4-d7f8-4325-9717-8ab148e51fd9,Plazas,segittur_rdf,turismo:maximumCapacity,cast_to_int,,ded4a88e-bed7-4723-82ec-d151abe0ea0f
