@@ -64,9 +64,10 @@ def read_ontology(file_path: str) -> dict:
             key = (row['organization'], package_id, resource_id)
             ontology = ontology_dict.get(key, {})
             ontology_column = ontology.get(row['column'], [])
-            ontology_column += [{k: row[k] for k in ['ontology', 'predicate', 'function']}]
-            ontology[row['column']] = ontology_column
-            ontology_dict[key] = ontology
+            if len(row['predicate'].strip()) > 0:
+                ontology_column += [{k: row[k] for k in ['ontology', 'predicate', 'function']}]
+                ontology[row['column']] = ontology_column
+                ontology_dict[key] = ontology
 
     print(" \t => Read {} ontology entries".format(len(ontology_dict)))
 
