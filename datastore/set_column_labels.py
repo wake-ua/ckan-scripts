@@ -59,7 +59,7 @@ def read_ontology(file_path: str) -> dict:
         for row in reader:
             resource_id = row['resource_url'].split('/resource/')[1]
             if CKAN_URL == "http://127.0.0.1:5000":
-                resource_id = row['resource_id_local']
+                resource_id = row['resource_id_local'].strip()
             package_id = row['resource_url'].split('/dataset/')[1].split('/resource/')[0]
             key = (row['organization'], package_id, resource_id)
             ontology = ontology_dict.get(key, {})
