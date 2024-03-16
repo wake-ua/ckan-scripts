@@ -65,7 +65,7 @@ def read_ontology(file_path: str) -> dict:
             ontology = ontology_dict.get(key, {})
             ontology_column = ontology.get(row['column'], [])
             if len(row['predicate'].strip()) > 0:
-                ontology_column += [{k: row[k] for k in ['ontology', 'predicate', 'function']}]
+                ontology_column += [{k: row[k] for k in ['ontology', 'prefix', 'predicate', 'function']}]
                 ontology[row['column']] = ontology_column
                 ontology_dict[key] = ontology
 
