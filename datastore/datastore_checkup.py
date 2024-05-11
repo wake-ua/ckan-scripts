@@ -151,7 +151,7 @@ def main() -> int:
     print(" - Missing resources result in {} datasets".format(len(dataset_list)))
 
     # Reload the resources
-    # reload_resources(csv_resources_missing)
+    reload_resources(csv_resources_missing)
     return 0
 
 
